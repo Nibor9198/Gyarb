@@ -3,6 +3,7 @@ package se.boregrim.gyarb;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,12 +14,20 @@ import java.util.HashMap;
 public class Game extends com.badlogic.gdx.Game {
 	public SpriteBatch batch;
 	Texture img;
-	HashMap<Screen,String>;
+	public HashMap<String, Screen> screens;
+	public Assets assets;
+	AssetManager manager;
 	@Override
 	public void create () {
+		//Initiating variables
 		batch = new SpriteBatch();
-		MainMenu main = new MainMenu();
+		screens = new HashMap<String, Screen>();
+		assets = new Assets();
+		manager = assets.getAssetManager();
 
+		manager.finishLoading();
+		MainMenu main = new MainMenu(this);
+		screens.put("main", main);
 		setScreen(main);
 
 			}
