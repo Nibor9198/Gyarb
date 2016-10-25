@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import se.boregrim.gyarb.Assets;
 import se.boregrim.gyarb.Game;
 
+import java.awt.*;
+
 /**
  * Created by robin.boregrim on 2016-10-21.
  */
@@ -16,10 +18,12 @@ public class MainMenu implements Screen {
 
     SpriteBatch batch;
     AssetManager manager;
+    Game game;
 
     public MainMenu(Game g) {
         this.batch = g.batch;
         manager = g.assets.getAssetManager();
+        game = g;
     }
 
     @Override
@@ -32,8 +36,15 @@ public class MainMenu implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        float height = Gdx.graphics.getHeight();
+        float width = Gdx.graphics.getWidth();
         batch.begin();
-        batch.draw((Texture)manager.get("harambe.png"),20,20);
+        //Texture t = manager.get("harambe2.png");
+        //batch.draw(t,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+
+        String s = "Ninja something";
+        game.font.draw(batch, s,width*0.5f - game.font.getSpaceWidth()* s.length(), height*0.75f);
+
         batch.end();
 
     }
