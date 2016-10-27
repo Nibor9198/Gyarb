@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,13 +33,12 @@ public class Game extends com.badlogic.gdx.Game {
 	public void create () {
 		//Initiating variables
 		batch = new SpriteBatch();
-		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		PerspectiveCamera camera = new PerspectiveCamera();
+		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 		screens = new HashMap<String, Screen>();
 		assets = new Assets();
 		manager = assets.getAssetManager();
 		font = new BitmapFont();
-
-
 
 
 		MainMenu main = new MainMenu(this);
@@ -60,5 +60,8 @@ public class Game extends com.badlogic.gdx.Game {
 	public void dispose () {
 		batch.dispose();
 		assets.dispose();
+	}
+	public FitViewport getViewport(){
+		return this.viewport;
 	}
 }

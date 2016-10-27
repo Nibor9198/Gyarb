@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import se.boregrim.gyarb.Assets;
@@ -25,15 +26,20 @@ public class MainMenu implements Screen {
     AssetManager manager;
     Game game;
     GlyphLayout layout;
-    public Stage stage;
+    Stage stage;
+    TextButton button;
+
     public MainMenu(Game g) {
-        this.batch = g.batch;
-        stage = new Stage();
-        FitViewport v = game.viewport;
-        stage.setViewport(game.viewport);
-        manager = g.assets.getAssetManager();
         game = g;
+        this.batch = game.batch;
+        stage = new Stage();
         layout = new GlyphLayout();
+        //button = new TextButton("Hello",game.font);
+
+
+        stage.setViewport(game.getViewport());
+        manager = g.assets.getAssetManager();
+
 
     }
 
@@ -46,14 +52,15 @@ public class MainMenu implements Screen {
     public void render(float delta) {
 
 
-        float height = Gdx.graphics.getHeight();
-        float width = Gdx.graphics.getWidth();
+        float height = stage.getHeight();// Gdx.graphics.getHeight();
+        float width = stage.getWidth(); //Gdx.graphics.getWidth();
         batch.begin();
         //Texture t = manager.get("harambe2.png");
         //batch.draw(t,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         layout = new GlyphLayout();
         String s = "Title";
         layout.setText(game.font,s);
+
         game.font.draw(batch, s,width*0.5f - layout.width/2, height*0.75f);
 
         batch.end();
@@ -62,9 +69,10 @@ public class MainMenu implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width,height);
+        stage.getCamera().update();
+        //stage.getViewport().getCamera();
     }
-
     @Override
     public void pause() {
 
