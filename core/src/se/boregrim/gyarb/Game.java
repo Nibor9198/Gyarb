@@ -4,18 +4,22 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import se.boregrim.gyarb.screens.LoadingScreen;
 import se.boregrim.gyarb.screens.MainMenu;
 
+import java.io.File;
 import java.util.HashMap;
 
 public class Game extends com.badlogic.gdx.Game {
@@ -26,8 +30,9 @@ public class Game extends com.badlogic.gdx.Game {
 	AssetManager manager;
 
 	public BitmapFont font;
-	public FitViewport viewport;
-
+	Skin skin;
+	//FitViewport viewport;
+	FitViewport viewport;
 
 	@Override
 	public void create () {
@@ -35,10 +40,12 @@ public class Game extends com.badlogic.gdx.Game {
 		batch = new SpriteBatch();
 		PerspectiveCamera camera = new PerspectiveCamera();
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+		//viewport = new ScreenViewport();
 		screens = new HashMap<String, Screen>();
 		assets = new Assets();
 		manager = assets.getAssetManager();
 		font = new BitmapFont();
+		skin = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
 
 
 		MainMenu main = new MainMenu(this);
@@ -63,5 +70,13 @@ public class Game extends com.badlogic.gdx.Game {
 	}
 	public FitViewport getViewport(){
 		return this.viewport;
+	}
+
+	//public ScreenViewport getViewport() {
+	//	return viewport;
+	//}
+
+	public Skin getSkin() {
+		return skin;
 	}
 }

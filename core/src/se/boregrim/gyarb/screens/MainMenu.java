@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import se.boregrim.gyarb.Assets;
@@ -21,7 +23,6 @@ import java.awt.*;
  * Created by robin.boregrim on 2016-10-21.
  */
 public class MainMenu implements Screen {
-
     SpriteBatch batch;
     AssetManager manager;
     Game game;
@@ -29,17 +30,21 @@ public class MainMenu implements Screen {
     Stage stage;
     TextButton button;
 
+
+
     public MainMenu(Game g) {
         game = g;
-        this.batch = game.batch;
-        stage = new Stage();
+        batch = game.batch;
+        stage = new Stage(game.getViewport());
+        Gdx.input.setInputProcessor(stage);
         layout = new GlyphLayout();
-        //button = new TextButton("Hello",game.font);
-
-
-        stage.setViewport(game.getViewport());
         manager = g.assets.getAssetManager();
 
+        button = new TextButton("Start game", game.getSkin(), "default");
+        stage.addActor(new Label("Hello",game.getSkin()));
+        stage.addActor(button);
+
+        stage.act();
 
     }
 
@@ -54,15 +59,16 @@ public class MainMenu implements Screen {
 
         float height = stage.getHeight();// Gdx.graphics.getHeight();
         float width = stage.getWidth(); //Gdx.graphics.getWidth();
+        stage.act(delta);
+        stage.draw();
         batch.begin();
         //Texture t = manager.get("harambe2.png");
         //batch.draw(t,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         layout = new GlyphLayout();
         String s = "Title";
         layout.setText(game.font,s);
-
-        game.font.draw(batch, s,width*0.5f - layout.width/2, height*0.75f);
-
+        //game.font.draw(batch, s,width*0.5f - layout.width/2, height*0.75f);
+        //button.draw(batch, 0.3f);
         batch.end();
 
     }
