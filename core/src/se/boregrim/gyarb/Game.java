@@ -31,16 +31,16 @@ public class Game extends com.badlogic.gdx.Game {
 
 	public BitmapFont font;
 	Skin skin;
+	ScreenViewport viewport;
 	//FitViewport viewport;
-	FitViewport viewport;
 
 	@Override
 	public void create () {
 		//Initiating variables
 		batch = new SpriteBatch();
 		PerspectiveCamera camera = new PerspectiveCamera();
-		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
-		//viewport = new ScreenViewport();
+		//viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+		viewport = new ScreenViewport();
 		screens = new HashMap<String, Screen>();
 		assets = new Assets();
 		manager = assets.getAssetManager();
@@ -68,13 +68,13 @@ public class Game extends com.badlogic.gdx.Game {
 		batch.dispose();
 		assets.dispose();
 	}
-	public FitViewport getViewport(){
-		return this.viewport;
-	}
-
-	//public ScreenViewport getViewport() {
-	//	return viewport;
+	//public FitViewport getViewport(){
+	//	return this.viewport;
 	//}
+
+	public ScreenViewport getViewport() {
+		return viewport;
+	}
 
 	public Skin getSkin() {
 		return skin;

@@ -3,6 +3,7 @@ package se.boregrim.gyarb;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 
+
 import java.io.File;
 
 /**
@@ -16,6 +17,7 @@ public class Assets {
 
         //Textures
         manager.load("harambe.png", Texture.class);
+        manager.load("menuBackground.png", Texture.class);
         //manager.load("harambe2.png", Texture.class);
         //manager.load("harambe3.png", Texture.class);
         //manager.load("harambe4.png", Texture.class);
@@ -27,7 +29,7 @@ public class Assets {
         //manager.load("harambe10.png", Texture.class);
         //manager.load("harambe11.png", Texture.class);
         //manager.load("harambe12.png", Texture.class);
-
+        System.out.println(1);
         update();
 
 

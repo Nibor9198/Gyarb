@@ -24,7 +24,7 @@ public class LoadingScreen implements Screen {
     @Override
     public void show() {
         font = new BitmapFont();
-        manager.finishLoadingAsset("harambe.png");
+        //manager.finishLoadingAsset("harambe.png");
 
 
     }
