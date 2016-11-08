@@ -44,7 +44,7 @@ public class MainMenu implements Screen {
     @Override
     public void show() {
         stage = new Stage(game.getViewport());
-        manager = game.assets.getAssetManager();
+        manager = game.getAssets().getAssetManager();
         Gdx.input.setInputProcessor(stage);
 
 
@@ -71,7 +71,7 @@ public class MainMenu implements Screen {
         start.addListener( new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                
+                game.setScreen(game.getScreens().get("game"));
             }
         });
         exit.addListener(new ClickListener(){
@@ -106,7 +106,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width,height+1);
+        stage.getViewport().update(width,height);
         stage.getCamera().update();
 
 

@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import se.boregrim.gyarb.screens.GameScreen;
 import se.boregrim.gyarb.screens.LoadingScreen;
 import se.boregrim.gyarb.screens.MainMenu;
 
@@ -24,9 +25,8 @@ import java.util.HashMap;
 
 public class Game extends com.badlogic.gdx.Game {
 	public SpriteBatch batch;
-	Texture img;
-	public HashMap<String, Screen> screens;
-	public Assets assets;
+	private HashMap<String, Screen> screens;
+	private Assets assets;
 	AssetManager manager;
 
 	public BitmapFont font;
@@ -38,7 +38,6 @@ public class Game extends com.badlogic.gdx.Game {
 	public void create () {
 		//Initiating variables
 		batch = new SpriteBatch();
-		PerspectiveCamera camera = new PerspectiveCamera();
 		//viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 		viewport = new ScreenViewport();
 		screens = new HashMap<String, Screen>();
@@ -47,11 +46,12 @@ public class Game extends com.badlogic.gdx.Game {
 		font = new BitmapFont();
 		skin = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
 
-
-		MainMenu main = new MainMenu(this);
-		screens.put("main", main);
 		LoadingScreen load = new LoadingScreen(this);
 		screens.put("load", load);
+		MainMenu main = new MainMenu(this);
+		screens.put("main", main);
+		GameScreen gameScreen = new GameScreen(this);
+		screens.put("game",gameScreen);
 		setScreen(load);
 			}
 
@@ -78,5 +78,12 @@ public class Game extends com.badlogic.gdx.Game {
 
 	public Skin getSkin() {
 		return skin;
+	}
+	public HashMap<String, Screen> getScreens(){
+		return screens;
+	}
+
+	public Assets getAssets() {
+		return assets;
 	}
 }

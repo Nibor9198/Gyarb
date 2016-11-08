@@ -15,18 +15,17 @@ import se.boregrim.gyarb.Game;
  * Created by robin.boregrim on 2016-10-24.
  */
 public class LoadingScreen implements Screen {
-    SpriteBatch batch;
-    Texture img;
+
+    //Variables
     Game game;
     AssetManager manager;
-    BitmapFont font;
     Stage stage;
     Skin skin;
     ProgressBar pb;
+
     public LoadingScreen(Game game){
         this.game = game;
-        manager = game.assets.getAssetManager();
-        this.batch = game.batch;
+        manager = game.getAssets().getAssetManager();
 
         stage = new Stage();
         skin = game.getSkin();
@@ -34,7 +33,6 @@ public class LoadingScreen implements Screen {
     }
     @Override
     public void show() {
-        font = new BitmapFont();
 
         stage.setViewport(game.getViewport());
 
@@ -51,21 +49,18 @@ public class LoadingScreen implements Screen {
     @Override
     public void render(float delta) {
         if (manager.update()) {
-            //game.setScreen(game.screens.get("main"));
+            game.setScreen(game.getScreens().get("main"));
         }
 
         pb.setValue(manager.getProgress());
         stage.act();
         stage.draw();
-        //String s = +(100 * manager.getProgress()) + "%";
-        //System.out.println(s);
-        //batch.begin();
-        //font.draw(batch, s, 20, 20);
-        //batch.end();
+
     }
 
     @Override
     public void resize(int width, int height) {
+        stage.getViewport().update(width,height);
 
     }
 
