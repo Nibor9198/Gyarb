@@ -5,6 +5,10 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import se.boregrim.gyarb.Game;
 
 /**
@@ -16,14 +20,29 @@ public class LoadingScreen implements Screen {
     Game game;
     AssetManager manager;
     BitmapFont font;
+    Stage stage;
+    Skin skin;
+    ProgressBar pb;
     public LoadingScreen(Game game){
         this.game = game;
         manager = game.assets.getAssetManager();
         this.batch = game.batch;
+
+        stage = new Stage();
+        skin = game.getSkin();
+
     }
     @Override
     public void show() {
         font = new BitmapFont();
+
+        stage.setViewport(game.getViewport());
+
+        pb = new ProgressBar(0f,1f,0.1f,false,game.getSkin());
+
+        pb.setBounds(stage.getWidth() * 0.5f -100f, stage.getHeight() * 0.5f,200,50);
+        stage.addActor(pb);
+
         //manager.finishLoadingAsset("harambe.png");
 
 
@@ -32,13 +51,17 @@ public class LoadingScreen implements Screen {
     @Override
     public void render(float delta) {
         if (manager.update()) {
-            game.setScreen(game.screens.get("main"));
+            //game.setScreen(game.screens.get("main"));
         }
-        String s = +(100 * manager.getProgress()) + "%";
-        System.out.println(s);
-        batch.begin();
-        font.draw(batch, s, 20, 20);
-        batch.end();
+
+        pb.setValue(manager.getProgress());
+        stage.act();
+        stage.draw();
+        //String s = +(100 * manager.getProgress()) + "%";
+        //System.out.println(s);
+        //batch.begin();
+        //font.draw(batch, s, 20, 20);
+        //batch.end();
     }
 
     @Override
