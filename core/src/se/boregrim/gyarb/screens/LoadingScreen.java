@@ -10,6 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import se.boregrim.gyarb.Game;
+import se.boregrim.gyarb.entities.Entity;
+
+import java.util.ArrayList;
 
 /**
  * Created by robin.boregrim on 2016-10-24.
@@ -17,18 +20,22 @@ import se.boregrim.gyarb.Game;
 public class LoadingScreen implements Screen {
 
     //Variables
-    Game game;
-    AssetManager manager;
-    Stage stage;
-    Skin skin;
-    ProgressBar pb;
+    private Game game;
+    private AssetManager manager;
+    private Stage stage;
+    private Skin skin;
+    private ProgressBar pb;
+
 
     public LoadingScreen(Game game){
         this.game = game;
-        //Getting the assetmanager (is used as input for progressbar)
+
+        //Making a refrence to the assetmanager (is used as input for progressbar)
         manager = game.getAssets().getAssetManager();
+
         // Creating the stage
         stage = new Stage();
+
         //Getting the skin for the progressbar
         skin = game.getSkin();
 
@@ -41,6 +48,7 @@ public class LoadingScreen implements Screen {
         //Creating Progressbar
         pb = new ProgressBar(0f,1f,0.1f,false,game.getSkin());
         pb.setBounds(stage.getWidth() * 0.5f -100f, stage.getHeight() * 0.5f,200,50);
+
         //Adding it to the stage
         stage.addActor(pb);
 

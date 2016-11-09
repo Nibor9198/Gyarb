@@ -59,13 +59,13 @@ public class MainMenu implements Screen {
 
 
 
-        //Ádding to stage
+        //Ádding Actors to stage
         stage.addActor(bg);
         stage.addActor(label);
         stage.addActor(start);
         stage.addActor(exit);
 
-
+        
 
         //Listeners
         start.addListener( new ClickListener(){
@@ -87,18 +87,22 @@ public class MainMenu implements Screen {
 
     @Override
     public void render(float delta) {
-
+        //Referencing scale of the stage
         float width = stage.getWidth();
         float height = stage.getHeight();
+        //Getting actors
         Array<Actor> a = stage.getActors();
         float w = 150;
         float h = 50;
 
+        //This Arrays index is based the order actors where added to the stage
         a.get(0).setBounds(0,0,width, height);
         a.get(1).setBounds((width-w)*0.5f,height*0.75f,w,h);
         a.get(2).setBounds((width-w)*0.5f,height*0.75f-h,w,h);
         a.get(3).setBounds((width-w)*0.5f,height*0.75f-2*h,w,h);
 
+
+        //Draw the stage
         stage.act(delta);
         stage.draw();
 
@@ -106,6 +110,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        //Update on resize
         stage.getViewport().update(width,height);
         stage.getCamera().update();
 
