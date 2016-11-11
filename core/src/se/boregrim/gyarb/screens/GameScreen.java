@@ -23,6 +23,7 @@ import se.boregrim.gyarb.entities.Player;
 
 
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import static se.boregrim.gyarb.utils.Constants.PPM;
@@ -35,6 +36,7 @@ import static com.badlogic.gdx.utils.JsonValue.ValueType.object;
 public class GameScreen implements Screen {
     private Game game;
     private ArrayList<Entity> entities;
+    private boolean paused;
 
     //Camera and Viewport
     private OrthographicCamera cam;
@@ -60,6 +62,8 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         entities = new ArrayList<Entity>();
+        paused = false;
+
         //Camera and Viewport
         cam = new OrthographicCamera();
         vp = new FitViewport(Gdx.graphics.getWidth() / PPM,Gdx.graphics.getHeight() / PPM, cam);
@@ -78,7 +82,9 @@ public class GameScreen implements Screen {
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
+
         player = new Player(world, 3,3);
+        entities.add(player);
 
         //Lighting
         rayHandler = new RayHandler(world);
@@ -88,25 +94,30 @@ public class GameScreen implements Screen {
 
 
 
+
+
         //
         for (MapObject mapObject : map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
             bdef.type = BodyDef.BodyType.StaticBody;
             bdef.position.set((rect.getX()+ rect.getWidth()/ 2) / PPM ,(rect.getY() + rect.getHeight()/ 2) / PPM);
             body = world.createBody(bdef);
-
+                //PPM = Pixels Per Meter
             shape.setAsBox(rect.getWidth() / 2/ PPM, rect.getHeight() / 2/ PPM);
             fdef.shape = shape;
 
             body.createFixture(fdef);
         }
 
+
     }
 
     public void update(float delta){
+
+
         world.step( 1/60f , 6, 2);
 
-        player.update(delta);
+        updateEntities(delta);
 
         cam.position.set(player.body.getPosition().x,player.body.getPosition().y,0);
         cam.lookAt(player.body.getPosition().x,player.body.getPosition().y,0);
@@ -116,7 +127,8 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         handleInput(delta);
-        update(delta);
+        if(!paused)
+            update(delta);
 
 
 
@@ -138,21 +150,29 @@ public class GameScreen implements Screen {
         float vX = 0;
         float vY = 0;
 
-        delta = delta * 50;
 
+        // Player Controls
+        if(!paused) {
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)/*&& player.body.getLinearVelocity().x <= 2f */) {
+                vX += speed;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) /*&& player.body.getLinearVelocity().x >= -2f*/) {
+                vX += -speed;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) /*&& player.body.getLinearVelocity().y <= 2f*/) {
+                vY += speed;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) /*&& player.body.getLinearVelocity().y >= -2f*/) {
+                vY += -speed;
+            }
+        }
 
-
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)/*&& player.body.getLinearVelocity().x <= 2f */){
-            vX += speed;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) /*&& player.body.getLinearVelocity().x >= -2f*/){
-            vX += -speed;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) /*&& player.body.getLinearVelocity().y <= 2f*/){
-            vY += speed;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) /*&& player.body.getLinearVelocity().y >= -2f*/){
-            vY += -speed;
+        //Other input
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            if(paused)
+                resume();
+            else
+                pause();
         }
         player.body.setLinearVelocity(vX,vY);
         //player.body.applyForceToCenter(vX,vY,true);
@@ -165,12 +185,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-
+        paused = true;
     }
 
     @Override
     public void resume() {
-
+        paused = false;
     }
 
     @Override
@@ -184,5 +204,15 @@ public class GameScreen implements Screen {
         map.dispose();
         otmr.dispose();
 
+    }
+    public void updateEntities(float delta){
+        for (Entity e:entities) {
+            e.update(delta);
+        }
+    }
+    public void renderEntities(float delta){
+        for (Entity e:entities) {
+            e.render(delta);
+        }
     }
 }

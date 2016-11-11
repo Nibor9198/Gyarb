@@ -6,4 +6,5 @@ package se.boregrim.gyarb.entities;
 public interface Entity {
 
     public void update(float delta);
+    public void render(float delta);
 }
