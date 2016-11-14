@@ -83,20 +83,24 @@ public class GameScreen implements Screen {
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
-        player = new Player(world, 3,3);
+        player = new Player(world, (int)vp.getWorldWidth()/2,(int)vp.getWorldHeight()/2);
         entities.add(player);
 
         //Lighting
         rayHandler = new RayHandler(world);
 
-        PointLight p =new PointLight(rayHandler, 2000, Color.CYAN, 8, 0, 0);
+        PointLight p = new PointLight(rayHandler, 2000, Color.CYAN, 8, 0, 0);
         p.attachToBody(player.body);
 
+        Filter filter = new Filter();
+        filter.groupIndex = 1;
+        filter.categoryBits = 1;
+        filter.maskBits = -1;
+        p.setContactFilter(filter);
 
 
 
-
-        //
+        // Create box2d objects from the map file (Collision)
         for (MapObject mapObject : map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
             bdef.type = BodyDef.BodyType.StaticBody;
@@ -105,6 +109,7 @@ public class GameScreen implements Screen {
                 //PPM = Pixels Per Meter
             shape.setAsBox(rect.getWidth() / 2/ PPM, rect.getHeight() / 2/ PPM);
             fdef.shape = shape;
+            fdef.filter.groupIndex = 1;
 
             body.createFixture(fdef);
         }
@@ -120,7 +125,8 @@ public class GameScreen implements Screen {
         updateEntities(delta);
 
         cam.position.set(player.body.getPosition().x,player.body.getPosition().y,0);
-        cam.lookAt(player.body.getPosition().x,player.body.getPosition().y,0);
+        //cam.lookAt(player.body.getPosition().x,player.body.getPosition().y,0);
+
         cam.update();
         otmr.setView(cam);
     }
@@ -146,9 +152,9 @@ public class GameScreen implements Screen {
 
         player.body.setLinearDamping(4f);
 
-        int speed = 8 ;
-        float vX = 0;
-        float vY = 0;
+        int speed = 8;
+        float vX = 0 ;
+        float vY = 0 ;
 
 
         // Player Controls

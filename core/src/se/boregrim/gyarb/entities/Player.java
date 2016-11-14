@@ -26,23 +26,6 @@ public class Player extends Sprite implements Entity{
         this.world = world;
 
         define(x,y);
-
-        playerFacing(Gdx.input.getX(),Gdx.input.getY());
-        InputProcessor ip = new InputProcessor() {
-            @Override
-            public boolean mouseMoved(int screenX, int screenY) {
-                Player.this.playerFacing(screenX,screenY);
-                return true;
-            }
-            @Override public boolean keyDown(int keycode) {return false;}
-            @Override public boolean keyUp(int keycode) {return false;}
-            @Override public boolean keyTyped(char character) {return false;}
-            @Override public boolean touchDown(int screenX, int screenY, int pointer, int button) {return false;}
-            @Override public boolean touchUp(int screenX, int screenY, int pointer, int button) {return false;}
-            @Override public boolean touchDragged(int screenX, int screenY, int pointer) {return false;}
-            @Override public boolean scrolled(int amount) {return false;}
-        };
-
     }
     public void define(int x, int y){
         BodyDef bdef = new BodyDef();
@@ -54,7 +37,7 @@ public class Player extends Sprite implements Entity{
         body = world.createBody(bdef);
 
         //shape.setRadius(10 / PPM);
-        shape.setAsBox(20/ PPM, 10 / PPM);
+        shape.setAsBox(10/ PPM, 20 / PPM);
         fdef.shape = shape;
         body.createFixture(fdef);
 
@@ -63,13 +46,18 @@ public class Player extends Sprite implements Entity{
 
     }
     public void playerFacing(int x, int y){
-        //float angle = MathUtils.radiansToDegrees * MathUtils.atan2()
+        x = x- Gdx.graphics.getWidth()/2;
+        y = y- Gdx.graphics.getHeight()/2;
+        float angle =  -MathUtils.atan2(y,x);
+        body.setTransform(getX(),getY(),angle);
+        //System.out.println(angle);
     } //http://stackoverflow.com/questions/30963901/box2d-body-to-follow-mouse-movement
     //http://stackoverflow.com/questions/16381031/get-cursor-position-in-libgdx
 
     @Override
     public void update(float delta) {
         setBounds(body.getPosition().x, body.getPosition().y,2,2);
+        playerFacing(Gdx.input.getX(),Gdx.input.getY());
         //body;
     }
 
