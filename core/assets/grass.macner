@@ -1,0 +1,56 @@
+Tilemancer 0.2.1
+
+Color 1 53 0
+Color 2 76 0
+Color 2 89 0
+Color 2 122 0
+Color 9 137 0
+Color 0 153 2
+Color 3 193 0
+Color 24 211 0
+Color 24 211 0
+PaletteSave1 
+PaletteSave2 
+FileSave1 \Users\Robin\Documents\GitHub\Gyarb\core\assets
+FileSave2 grass.macner
+Indexed 0
+Size 32
+Camera 0 0
+Node {
+Name perlin_noise.lua
+Position 349.681 63.3555
+Parameter 9 -1 -1 0
+Parameter 2 2 -1 0
+Parameter 4 1 -1 0
+Parameter 160 100 -1 0
+Parameter 58 0 100 0
+Parameter 101 0 -1 0
+}
+Node {
+Name perlin_noise.lua
+Position 338.415 296.257
+Parameter 7 -1 -1 0
+Parameter 2 2 -1 0
+Parameter 3 1 -1 0
+Parameter 203 100 -1 0
+Parameter 80 0 100 0
+Parameter 100 0 -1 0
+}
+Node {
+Name colorizer.lua
+Position 561.322 201.742
+Ramp {
+Point 29 0 0.693354 0.721132
+Point 40 46.4688 0.695229 0.331726
+Point 43 0 0.396961 0.587799
+Point 47 50.1944 0.401956 0.362095
+Point 52 217.235 0.76598 0.835689
+Point 59 0 0.407275 0.736602
+Point 100 0 0.23261 0.859808
+Point 61 0 0 1
+}
+Parameter 0 0 0 0
+Parameter 0 0 0 0
+Parameter 0 0 1 8
+Connection 0 1 0
+}
