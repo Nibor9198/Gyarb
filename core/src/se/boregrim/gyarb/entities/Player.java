@@ -37,11 +37,12 @@ public class Player extends Sprite implements Entity{
         body = world.createBody(bdef);
 
         //shape.setRadius(10 / PPM);
-        shape.setAsBox(10/ PPM, 20 / PPM);
+        shape.setAsBox(10 / PPM, 20 / PPM);
         fdef.shape = shape;
+        fdef.density = 20;
         body.createFixture(fdef);
 
-        shape.setAsBox(10/ PPM, 10 / PPM);
+        shape.setAsBox(10 / PPM, 10 / PPM);
 
 
     }

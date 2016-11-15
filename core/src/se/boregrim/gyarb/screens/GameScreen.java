@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import se.boregrim.gyarb.Game;
+import se.boregrim.gyarb.entities.Box;
 import se.boregrim.gyarb.entities.Entity;
 import se.boregrim.gyarb.entities.Player;
 
@@ -152,15 +153,19 @@ public class GameScreen implements Screen {
 
         player.body.setLinearDamping(4f);
 
-        int speed = 8;
+        int speed = (int) (25 * PPM);
+        int maxVel = 50;
         float vX = 0 ;
         float vY = 0 ;
 
 
+
         // Player Controls
         if(!paused) {
+
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)/*&& player.body.getLinearVelocity().x <= 2f */) {
                 vX += speed;
+
             }
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) /*&& player.body.getLinearVelocity().x >= -2f*/) {
                 vX += -speed;
@@ -171,6 +176,9 @@ public class GameScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) /*&& player.body.getLinearVelocity().y >= -2f*/) {
                 vY += -speed;
             }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+                createBox( (int) (player.body.getPosition().x * PPM),(int)(player.body.getPosition().y *PPM));
+            }
         }
 
         //Other input
@@ -180,8 +188,10 @@ public class GameScreen implements Screen {
             else
                 pause();
         }
-        player.body.setLinearVelocity(vX,vY);
-        //player.body.applyForceToCenter(vX,vY,true);
+        //player.body.setLinearVelocity(vX,vY);
+        Vector2 v = player.body.getLinearVelocity();
+
+        player.body.applyForceToCenter( v.x >=0 ? (v.x < maxVel * PPM ? vX : 0) : (v.x > -maxVel * PPM ? vX : 0) , v.y >=0 ? (v.y < maxVel * PPM ? vY : 0) : (v.y > -maxVel * PPM ? vY : 0),true);
 }
 
     @Override
@@ -220,5 +230,8 @@ public class GameScreen implements Screen {
         for (Entity e:entities) {
             e.render(delta);
         }
+    }
+    public void createBox(int x, int y){
+        new Box(world,x,y);
     }
 }
