@@ -39,9 +39,13 @@ public class GameScreen implements Screen {
     private ArrayList<Entity> entities;
     private boolean paused;
 
+    //Ui
+    GameUiScreen ui;
+
     //Camera and Viewport
     private OrthographicCamera cam;
     private FitViewport vp;
+
 
     //Map rendering
     private TiledMap map;
@@ -65,10 +69,15 @@ public class GameScreen implements Screen {
         entities = new ArrayList<Entity>();
         paused = false;
 
+
+
         //Camera and Viewport
         cam = new OrthographicCamera();
         vp = new FitViewport(Gdx.graphics.getWidth() / PPM,Gdx.graphics.getHeight() / PPM, cam);
         cam.position.set(vp.getWorldWidth()/2 / PPM,vp.getWorldHeight()/2 / PPM,0);
+
+        //Ui
+        ui = new GameUiScreen(this);
 
         //Load map
         mapRef = "Maps/TestMap.tmx";
@@ -142,12 +151,21 @@ public class GameScreen implements Screen {
         //Render map
         otmr.render();
 
+        //Entities
+        renderEntities(delta);
+
         //Render Box2d
         b2dr.render(world, cam.combined);
+
+
 
         //Render light
         rayHandler.setCombinedMatrix(cam);
         rayHandler.updateAndRender();
+
+        //Ui
+        ui.render(delta);
+
     }
     public void handleInput(float delta){
 
@@ -233,5 +251,14 @@ public class GameScreen implements Screen {
     }
     public void createBox(int x, int y){
         new Box(world,x,y);
+    }
+
+
+    public FitViewport getViewport(){
+        return vp;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }
