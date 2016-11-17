@@ -46,6 +46,7 @@ public class Game extends com.badlogic.gdx.Game {
 		font = new BitmapFont();
 		skin = new Skin(Gdx.files.internal("clean-crispy/skin/clean-crispy-ui.json"));
 
+
 		LoadingScreen load = new LoadingScreen(this);
 		screens.put("load", load);
 		MainMenu main = new MainMenu(this);

@@ -40,10 +40,12 @@ public class Player extends Sprite implements Entity{
         shape.setAsBox(10 / PPM, 20 / PPM);
         fdef.shape = shape;
         fdef.density = 20;
+        fdef.restitution =2;
         body.createFixture(fdef);
 
-        shape.setAsBox(10 / PPM, 10 / PPM);
 
+        shape.setAsBox(10 / PPM, 10 / PPM);
+        body.setLinearDamping(4f);
 
     }
     public void playerFacing(int x, int y){

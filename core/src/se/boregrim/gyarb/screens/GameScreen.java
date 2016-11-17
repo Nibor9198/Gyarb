@@ -39,8 +39,7 @@ public class GameScreen implements Screen {
     private ArrayList<Entity> entities;
     private boolean paused;
 
-    //Ui
-    GameUiScreen ui;
+
 
     //Camera and Viewport
     private OrthographicCamera cam;
@@ -61,6 +60,9 @@ public class GameScreen implements Screen {
     //Lighting
     private RayHandler rayHandler;
 
+
+    //Ui
+    GameUiScreen ui;
     public GameScreen(Game game){
         this.game = game;
     }
@@ -76,8 +78,7 @@ public class GameScreen implements Screen {
         vp = new FitViewport(Gdx.graphics.getWidth() / PPM,Gdx.graphics.getHeight() / PPM, cam);
         cam.position.set(vp.getWorldWidth()/2 / PPM,vp.getWorldHeight()/2 / PPM,0);
 
-        //Ui
-        ui = new GameUiScreen(this);
+
 
         //Load map
         mapRef = "Maps/TestMap.tmx";
@@ -124,7 +125,9 @@ public class GameScreen implements Screen {
             body.createFixture(fdef);
         }
 
-
+        //Ui
+        ui = new GameUiScreen(this);
+        ui.show();
     }
 
     public void update(float delta){
@@ -160,8 +163,8 @@ public class GameScreen implements Screen {
 
 
         //Render light
-        rayHandler.setCombinedMatrix(cam);
-        rayHandler.updateAndRender();
+        //ayHandler.setCombinedMatrix(cam);
+        //ayHandler.updateAndRender();
 
         //Ui
         ui.render(delta);
@@ -169,7 +172,7 @@ public class GameScreen implements Screen {
     }
     public void handleInput(float delta){
 
-        player.body.setLinearDamping(4f);
+
 
         int speed = (int) (25 * PPM);
         int maxVel = 50;
