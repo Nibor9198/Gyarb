@@ -27,6 +27,7 @@ public class Box implements Entity {
         fdef.restitution = 0.01f;
         fdef.density = 20;
 
+
         body.createFixture(fdef);
 
         shape.setAsBox(10/ PPM, 10 / PPM);

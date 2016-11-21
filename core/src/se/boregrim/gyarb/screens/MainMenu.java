@@ -71,7 +71,9 @@ public class MainMenu implements Screen {
         start.addListener( new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 game.setScreen(game.getScreens().get("game"));
+
             }
         });
         exit.addListener(new ClickListener(){
@@ -111,7 +113,7 @@ public class MainMenu implements Screen {
     @Override
     public void resize(int width, int height) {
         //Update on resize
-        stage.getViewport().update(width,height);
+        stage.getViewport().update(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         stage.getCamera().update();
 
 
@@ -133,6 +135,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
+        stage.dispose();
 
     }
 }

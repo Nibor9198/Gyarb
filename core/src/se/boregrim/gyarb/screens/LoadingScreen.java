@@ -46,8 +46,8 @@ public class LoadingScreen implements Screen {
         stage.setViewport(game.getViewport());
 
         //Creating Progressbar
-        pb = new ProgressBar(0f,1f,0.1f,false,game.getSkin());
-        pb.setBounds(stage.getWidth() * 0.5f -100f, stage.getHeight() * 0.5f,200,50);
+        pb = new ProgressBar(0f,1f,0.1f,false,skin);
+        pb.setBounds(stage.getWidth() * 0.5f - 100f, stage.getHeight() * 0.5f,200,50);
 
         //Adding it to the stage
         stage.addActor(pb);

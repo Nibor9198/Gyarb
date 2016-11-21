@@ -27,9 +27,8 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import static se.boregrim.gyarb.utils.Constants.PPM;
-
 import static com.badlogic.gdx.utils.JsonValue.ValueType.object;
+import static se.boregrim.gyarb.utils.Constants.*;
 
 /**
  * Created by Robin on 2016-11-08.
@@ -104,9 +103,7 @@ public class GameScreen implements Screen {
         p.attachToBody(player.body);
 
         Filter filter = new Filter();
-        filter.groupIndex = 1;
-        filter.categoryBits = 1;
-        filter.maskBits = -1;
+        filter.groupIndex = -1;
         p.setContactFilter(filter);
 
 
@@ -120,7 +117,10 @@ public class GameScreen implements Screen {
                 //PPM = Pixels Per Meter
             shape.setAsBox(rect.getWidth() / 2/ PPM, rect.getHeight() / 2/ PPM);
             fdef.shape = shape;
-            fdef.filter.groupIndex = 1;
+            fdef.filter.categoryBits = CAT_EDGE;
+            fdef.filter.maskBits = CAT_PLAYER | CAT_ENEMY | CAT_ENTITY;
+            filter.groupIndex = -1;
+            //fdef.filter.groupIndex = 1;
 
             body.createFixture(fdef);
         }
@@ -163,8 +163,8 @@ public class GameScreen implements Screen {
 
 
         //Render light
-        //ayHandler.setCombinedMatrix(cam);
-        //ayHandler.updateAndRender();
+        rayHandler.setCombinedMatrix(cam);
+        rayHandler.updateAndRender();
 
         //Ui
         ui.render(delta);
@@ -174,8 +174,8 @@ public class GameScreen implements Screen {
 
 
 
-        int speed = (int) (25 * PPM);
-        int maxVel = 50;
+        int speed = (int) (15 * PPM);
+        float maxVel = 15;
         float vX = 0 ;
         float vY = 0 ;
 
@@ -201,6 +201,15 @@ public class GameScreen implements Screen {
                 createBox( (int) (player.body.getPosition().x * PPM),(int)(player.body.getPosition().y *PPM));
             }
         }
+        Vector2 v = player.body.getLinearVelocity();
+
+        maxVel = vX == 0 || vY == 0 ? maxVel: (float) Math.sqrt((Math.pow(maxVel,2))/2) ;
+        //System.out.println(maxVel);
+        //System.out.println((float) Math.sqrt((Math.pow(maxVel*PPM,2))/2));
+
+        player.body.applyForceToCenter( v.x >=0 ? (v.x < maxVel ? vX : 0) : (v.x > -maxVel ? vX : 0) , v.y >=0 ? (v.y < maxVel ? vY : 0) : (v.y > -maxVel? vY : 0),true);
+        //System.out.println(Math.sqrt(Math.pow(v.x,2) + Math.pow(v.y,2)));
+
 
         //Other input
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
@@ -210,9 +219,9 @@ public class GameScreen implements Screen {
                 pause();
         }
         //player.body.setLinearVelocity(vX,vY);
-        Vector2 v = player.body.getLinearVelocity();
 
-        player.body.applyForceToCenter( v.x >=0 ? (v.x < maxVel * PPM ? vX : 0) : (v.x > -maxVel * PPM ? vX : 0) , v.y >=0 ? (v.y < maxVel * PPM ? vY : 0) : (v.y > -maxVel * PPM ? vY : 0),true);
+
+
 }
 
     @Override
@@ -240,6 +249,7 @@ public class GameScreen implements Screen {
         rayHandler.dispose();
         map.dispose();
         otmr.dispose();
+
 
     }
     public void updateEntities(float delta){

@@ -1,6 +1,7 @@
 package se.boregrim.gyarb.screens;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -24,7 +25,8 @@ public class GameUiScreen implements Screen {
         gs = gameScreen;
         game = gs.getGame();
 
-        vp = gs.getViewport();
+        //vp = gs.getViewport();
+        vp = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         stage = new Stage(vp);
         Label label = new Label("Tjenare", game.getSkin());
 
@@ -36,7 +38,7 @@ public class GameUiScreen implements Screen {
     }
     @Override
     public void show() {
-        System.out.println("GameUiScreen show is working");
+
     }
 
     @Override
@@ -44,8 +46,8 @@ public class GameUiScreen implements Screen {
 
         float x = vp.getScreenX();
         float y = vp.getScreenY();
-        stage.getActors().get(0).setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f,50f);
-        stage.getActors().get(1).setBounds(x+2f,y+2f,2,2);
+        stage.getActors().get(0).setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f/PPM,50f/PPM);
+        stage.getActors().get(1).setBounds(x-2f,y-2f,200,200);
         stage.act(delta);
         stage.draw();
     }
@@ -55,7 +57,7 @@ public class GameUiScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        vp.update(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
     }
 
     @Override

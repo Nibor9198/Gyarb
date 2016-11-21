@@ -1,16 +1,10 @@
 package se.boregrim.gyarb.entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import se.boregrim.gyarb.utils.Constants;
 
 import static se.boregrim.gyarb.utils.Constants.PPM;
 
@@ -30,22 +24,23 @@ public class Player extends Sprite implements Entity{
     public void define(int x, int y){
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-
+        //PolygonShape shape = new PolygonShape();
+        CircleShape shape = new CircleShape();
         bdef.position.set(x / PPM, y / PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bdef);
 
-        //shape.setRadius(10 / PPM);
-        shape.setAsBox(10 / PPM, 20 / PPM);
+        shape.setRadius(12 / PPM);
+        //shape.setAsBox(10 / PPM, 20 / PPM);
         fdef.shape = shape;
         fdef.density = 20;
-        fdef.restitution =2;
+        fdef.filter.categoryBits = Constants.CAT_PLAYER;
+        fdef.filter.maskBits = Constants.CAT_WALL | Constants.CAT_EDGE;
+        //fdef.restitution =2;
         body.createFixture(fdef);
 
-
-        shape.setAsBox(10 / PPM, 10 / PPM);
-        body.setLinearDamping(4f);
+        //shape.setAsBox(10 / PPM, 10 / PPM);
+        body.setLinearDamping(3f);
 
     }
     public void playerFacing(int x, int y){
