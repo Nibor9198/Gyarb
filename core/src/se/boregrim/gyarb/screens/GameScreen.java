@@ -173,7 +173,7 @@ public class GameScreen implements Screen {
     public void handleInput(float delta){
 
 
-
+        //Setting variables for player movement
         int speed = (int) (15 * PPM);
         float maxVel = 15;
         float vX = 0 ;
@@ -201,12 +201,12 @@ public class GameScreen implements Screen {
                 createBox( (int) (player.body.getPosition().x * PPM),(int)(player.body.getPosition().y *PPM));
             }
         }
-        Vector2 v = player.body.getLinearVelocity();
 
+        //Moving the player
+        Vector2 v = player.body.getLinearVelocity();
         maxVel = vX == 0 || vY == 0 ? maxVel: (float) Math.sqrt((Math.pow(maxVel,2))/2) ;
         //System.out.println(maxVel);
         //System.out.println((float) Math.sqrt((Math.pow(maxVel*PPM,2))/2));
-
         player.body.applyForceToCenter( v.x >=0 ? (v.x < maxVel ? vX : 0) : (v.x > -maxVel ? vX : 0) , v.y >=0 ? (v.y < maxVel ? vY : 0) : (v.y > -maxVel? vY : 0),true);
         //System.out.println(Math.sqrt(Math.pow(v.x,2) + Math.pow(v.y,2)));
 
@@ -218,7 +218,6 @@ public class GameScreen implements Screen {
             else
                 pause();
         }
-        //player.body.setLinearVelocity(vX,vY);
 
 
 

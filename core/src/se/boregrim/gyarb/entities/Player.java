@@ -3,6 +3,7 @@ package se.boregrim.gyarb.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import se.boregrim.gyarb.utils.Constants;
 
@@ -14,6 +15,7 @@ import static se.boregrim.gyarb.utils.Constants.PPM;
 public class Player extends Sprite implements Entity{
     public World world;
     public Body body;
+    public Body Sensor;
     public Sprite legs;
 
     public Player(World world, int x, int y){
@@ -22,35 +24,64 @@ public class Player extends Sprite implements Entity{
         define(x,y);
     }
     public void define(int x, int y){
+
+        //Creating player body
         BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
-        //PolygonShape shape = new PolygonShape();
-        CircleShape shape = new CircleShape();
+
         bdef.position.set(x / PPM, y / PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bdef);
 
+        //Creating Player fixture
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
         shape.setRadius(12 / PPM);
-        //shape.setAsBox(10 / PPM, 20 / PPM);
         fdef.shape = shape;
         fdef.density = 20;
         fdef.filter.categoryBits = Constants.CAT_PLAYER;
         fdef.filter.maskBits = Constants.CAT_WALL | Constants.CAT_EDGE;
-        //fdef.restitution =2;
-        body.createFixture(fdef);
+        body.createFixture(fdef).setUserData("Player");
 
-        //shape.setAsBox(10 / PPM, 10 / PPM);
+        //Setting LinearDamping
         body.setLinearDamping(3f);
 
+        //Creating Hit Sensor fixture
+        PolygonShape shape2 = new PolygonShape();
+        float radius = 3;
+        Vector2 verticles[] = new Vector2[8];
+        //for (Vector2 v:verticles) {
+        //    v = new Vector2(0,0);
+        //}
+        verticles[0] = new Vector2(0,0);
+        System.out.println("TJo");
+        for (int i = 0; i < 7; i++) {
+            float angle = i/6*90;
+            System.out.println("Hej");
+            verticles[i+1] = new Vector2(radius * (float)Math.acos(angle),radius * (float)Math.asin(angle));
+        }
+        shape2.set(verticles);
+        System.out.println("ho");
+        shape2.setRadius(8);
+        fdef.shape = shape2;
+        System.out.println("hi");
+        body.createFixture(fdef).setUserData("hitSensor");
+        System.out.println("Ha");
+
+
     }
+
+    // X and y describes a point towards which the player should be facing, this usually is the mouse
     public void playerFacing(int x, int y){
+        //Since the player is always in the middle we can easily get the angle by basing x and y's origin in the center.
+
         x = x- Gdx.graphics.getWidth()/2;
         y = y- Gdx.graphics.getHeight()/2;
+        //Calculating the angle
         float angle =  -MathUtils.atan2(y,x);
+        //Transforming the Body
         body.setTransform(getX(),getY(),angle);
-        //System.out.println(angle);
-    } //http://stackoverflow.com/questions/30963901/box2d-body-to-follow-mouse-movement
-    //http://stackoverflow.com/questions/16381031/get-cursor-position-in-libgdx
+
+    }
 
     @Override
     public void update(float delta) {

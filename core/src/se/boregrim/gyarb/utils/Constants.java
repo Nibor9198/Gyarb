@@ -14,5 +14,5 @@ public final class Constants {
     public static final short CAT_PLAYER = 4;
     public static final short CAT_ENEMY = 8;
     public static final short CAT_ENTITY = 16;
-    public static final short CAT_LIGHT = 32;
+    public static final short CAT_SENSOR = 32;
 }
