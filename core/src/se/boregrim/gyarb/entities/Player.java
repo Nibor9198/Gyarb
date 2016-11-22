@@ -47,25 +47,24 @@ public class Player extends Sprite implements Entity{
 
         //Creating Hit Sensor fixture
         PolygonShape shape2 = new PolygonShape();
-        float radius = 3;
-        Vector2 verticles[] = new Vector2[8];
-        //for (Vector2 v:verticles) {
-        //    v = new Vector2(0,0);
-        //}
+
+
+
+
+        //ANVÄND BARA TRE PUNKTER
+        float radius = 20 / PPM;
+        Vector2 verticles[] = new Vector2[2];
         verticles[0] = new Vector2(0,0);
-        System.out.println("TJo");
-        for (int i = 0; i < 7; i++) {
-            float angle = i/6*90;
-            System.out.println("Hej");
-            verticles[i+1] = new Vector2(radius * (float)Math.acos(angle),radius * (float)Math.asin(angle));
+        for (int i = 0; i < 2; i++) {
+            float angle = (float) ((i+1) * (Math.PI/(2*4))- 2 *(Math.PI/(2*4)));
+            System.out.println(((i+1) * (Math.PI/(2*4))- 2 *(Math.PI/(2*4)))/ Math.PI);
+            System.out.println(verticles[i+1] = new Vector2(radius * (float)Math.acos(angle),radius * (float)Math.asin(angle)));
         }
         shape2.set(verticles);
-        System.out.println("ho");
         shape2.setRadius(8);
         fdef.shape = shape2;
-        System.out.println("hi");
+        fdef.isSensor = true;
         body.createFixture(fdef).setUserData("hitSensor");
-        System.out.println("Ha");
 
 
     }
