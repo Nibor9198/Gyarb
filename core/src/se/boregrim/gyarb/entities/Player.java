@@ -51,19 +51,20 @@ public class Player extends Sprite implements Entity{
 
 
 
-        //ANVÄND BARA TRE PUNKTER
-        float radius = 20 / PPM;
-        Vector2 verticles[] = new Vector2[2];
-        verticles[0] = new Vector2(0,0);
-        for (int i = 0; i < 2; i++) {
-            float angle = (float) ((i+1) * (Math.PI/(2*4))- 2 *(Math.PI/(2*4)));
-            System.out.println(((i+1) * (Math.PI/(2*4))- 2 *(Math.PI/(2*4)))/ Math.PI);
-            System.out.println(verticles[i+1] = new Vector2(radius * (float)Math.acos(angle),radius * (float)Math.asin(angle)));
-        }
+
+        float radius = 40 / PPM;
+        Vector2 verticles[] = new Vector2[3];
+        verticles[0] = new Vector2(-5/PPM,0/PPM);
+        float angle = (float) (Math.PI / 5);
+        System.out.println(verticles[1] = new Vector2((float) Math.cos(angle) * radius ,(float) Math.sin(angle) * radius));
+        System.out.println(verticles[2] = new Vector2((float) Math.cos(-angle) * radius,(float) Math.sin(-angle) * radius));
+        shape2.setRadius(radius);
         shape2.set(verticles);
-        shape2.setRadius(8);
         fdef.shape = shape2;
+        fdef.density = 0;
+        fdef.filter.groupIndex = -1;
         fdef.isSensor = true;
+
         body.createFixture(fdef).setUserData("hitSensor");
 
 

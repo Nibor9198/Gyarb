@@ -33,7 +33,7 @@ public class GameUiScreen implements Screen {
         stage.addActor(label);
         Button b = new Button(game.getSkin());
 
-        stage.addActor(b);
+        //stage.addActor(b);
 
     }
     @Override
@@ -47,7 +47,7 @@ public class GameUiScreen implements Screen {
         float x = vp.getScreenX();
         float y = vp.getScreenY();
         stage.getActors().get(0).setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f/PPM,50f/PPM);
-        stage.getActors().get(1).setBounds(x-2f,y-2f,200,200);
+        //stage.getActors().get(1).setBounds(x-2f,y-2f,200,200);
         stage.act(delta);
         stage.draw();
     }
