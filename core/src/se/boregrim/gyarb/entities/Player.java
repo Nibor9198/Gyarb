@@ -52,12 +52,21 @@ public class Player extends Sprite implements Entity{
 
 
 
-        float radius = 40 / PPM;
-        Vector2 verticles[] = new Vector2[3];
-        verticles[0] = new Vector2(-5/PPM,0/PPM);
-        float angle = (float) (Math.PI / 5);
-        System.out.println(verticles[1] = new Vector2((float) Math.cos(angle) * radius ,(float) Math.sin(angle) * radius));
-        System.out.println(verticles[2] = new Vector2((float) Math.cos(-angle) * radius,(float) Math.sin(-angle) * radius));
+        float radius = 20 / PPM;
+        Vector2 verticles[] = new Vector2[5];
+        verticles[0] = new Vector2(0/PPM,0/PPM);
+        float angle = (float) (Math.PI /2);
+        //System.out.println(verticles[1] = new Vector2((float) Math.cos(angle) * radius ,(float) Math.sin(angle) * radius));
+        //verticles[2] = new Vector2((float) Math.cos(angle/2) * radius ,(float) Math.sin(angle/2) * radius);
+        for (int i = 0; i < verticles.length -1; i++) {
+            float part = angle * 2 / (verticles.length -2);
+            System.out.println(part);
+            System.out.println(verticles[i+1] = new Vector2((float) Math.cos(angle - part * i) * radius ,(float) Math.sin(angle - part * i) * radius));
+        }
+
+
+        //verticles[3] = new Vector2((float) Math.cos(-angle/2) * radius ,(float) Math.sin(-angle/2) * radius);
+        //System.out.println(verticles[4] = new Vector2((float) Math.cos(-angle) * radius,(float) Math.sin(-angle) * radius));
         shape2.setRadius(radius);
         shape2.set(verticles);
         fdef.shape = shape2;
