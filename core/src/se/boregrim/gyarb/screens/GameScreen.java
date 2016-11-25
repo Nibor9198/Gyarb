@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -44,6 +45,9 @@ public class GameScreen implements Screen {
     private OrthographicCamera cam;
     private FitViewport vp;
 
+    //Batch
+    SpriteBatch batch;
+
 
     //Map rendering
     private TiledMap map;
@@ -77,7 +81,8 @@ public class GameScreen implements Screen {
         vp = new FitViewport(Gdx.graphics.getWidth() / PPM,Gdx.graphics.getHeight() / PPM, cam);
         cam.position.set(vp.getWorldWidth()/2 / PPM,vp.getWorldHeight()/2 / PPM,0);
 
-
+        //Batch
+        batch = new SpriteBatch();
 
         //Load map
         mapRef = "Maps/TestMap.tmx";
@@ -93,7 +98,7 @@ public class GameScreen implements Screen {
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
-        player = new Player(world, (int)vp.getWorldWidth()/2,(int)vp.getWorldHeight()/2);
+        player = new Player(this, (int)vp.getWorldWidth()/2,(int)vp.getWorldHeight()/2);
         entities.add(player);
 
         //Lighting
@@ -154,17 +159,19 @@ public class GameScreen implements Screen {
         //Render map
         otmr.render();
 
-        //Entities
-        renderEntities(delta);
+
 
         //Render Box2d
         b2dr.render(world, cam.combined);
 
-
+        //Entities
+        renderEntities(delta);
 
         //Render light
         rayHandler.setCombinedMatrix(cam);
         rayHandler.updateAndRender();
+
+
 
         //Ui
         ui.render(delta);
@@ -272,5 +279,13 @@ public class GameScreen implements Screen {
 
     public Game getGame() {
         return game;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
     }
 }

@@ -17,8 +17,8 @@ public class Enemy extends Sprite implements Entity {
     Body body;
     public Enemy(GameScreen gs, int x, int y){
         this.gs = gs;
-        world = gs.getWorld();
-        body = gs.createEBody(0, x,y,CAT_ENEMY, CAT_EDGE);
+        //world = gs.getWorld();
+        //body = gs.createEBody(0, x,y,CAT_ENEMY, CAT_EDGE);
 
     }
     @Override

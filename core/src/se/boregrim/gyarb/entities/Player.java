@@ -1,10 +1,14 @@
 package se.boregrim.gyarb.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import se.boregrim.gyarb.screens.GameScreen;
 import se.boregrim.gyarb.utils.Constants;
 
 import static se.boregrim.gyarb.utils.Constants.PPM;
@@ -15,11 +19,18 @@ import static se.boregrim.gyarb.utils.Constants.PPM;
 public class Player extends Sprite implements Entity{
     public World world;
     public Body body;
-    public Body Sensor;
+    private GameScreen gs;
+    private AssetManager manager;
     public Sprite legs;
 
-    public Player(World world, int x, int y){
-        this.world = world;
+    public Player(GameScreen gs, int x, int y){
+        super((Texture) gs.getGame().getAssets().getAssetManager().get("PlayerSprite.png"));
+        this.gs = gs;
+        world = gs.getWorld();
+        manager = gs.getGame().getAssets().getAssetManager();
+
+
+
 
         define(x,y);
     }
@@ -53,7 +64,7 @@ public class Player extends Sprite implements Entity{
 
 
         float radius = 20 / PPM;
-        Vector2 verticles[] = new Vector2[5];
+        Vector2 verticles[] = new Vector2[7];
         verticles[0] = new Vector2(0/PPM,0/PPM);
         float angle = (float) (Math.PI /2);
         //System.out.println(verticles[1] = new Vector2((float) Math.cos(angle) * radius ,(float) Math.sin(angle) * radius));
@@ -77,6 +88,9 @@ public class Player extends Sprite implements Entity{
         body.createFixture(fdef).setUserData("hitSensor");
 
 
+        //Set bounds
+        setBounds(body.getPosition().x, body.getPosition().y,32/PPM,32/PPM);
+
     }
 
     // X and y describes a point towards which the player should be facing, this usually is the mouse
@@ -88,20 +102,31 @@ public class Player extends Sprite implements Entity{
         //Calculating the angle
         float angle =  -MathUtils.atan2(y,x);
         //Transforming the Body
-        body.setTransform(getX(),getY(),angle);
+        body.setTransform(body.getPosition().x,body.getPosition().y,angle);
+
+        setRotation((float) ((angle *360/(2*Math.PI))+90));
 
     }
 
     @Override
     public void update(float delta) {
-        setBounds(body.getPosition().x, body.getPosition().y,2,2);
+        //Putting sprite
+        setCenter(body.getPosition().x,body.getPosition().y);
+        setOrigin(getWidth()/2,getHeight()/2);
+
+        //setBounds(0,0,32/PPM, 32/PPM);
         playerFacing(Gdx.input.getX(),Gdx.input.getY());
+
         //body;
     }
 
     @Override
     public void render(float delta) {
-
+        SpriteBatch batch = gs.getBatch();
+        batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
+        batch.begin();
+        draw(batch);
+        batch.end();
     }
 
 

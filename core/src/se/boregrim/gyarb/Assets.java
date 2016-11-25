@@ -18,6 +18,7 @@ public class Assets {
         //Textures
         manager.load("harambe.png", Texture.class);
         manager.load("menuBackground.png", Texture.class);
+        manager.load("PlayerSprite.png", Texture.class);
         //manager.load("harambe2.png", Texture.class);
         //manager.load("harambe3.png", Texture.class);
         //manager.load("harambe4.png", Texture.class);
