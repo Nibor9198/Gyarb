@@ -51,6 +51,7 @@ public class Player extends Sprite implements Entity{
         fdef.density = 20;
         fdef.filter.categoryBits = Constants.CAT_PLAYER;
         fdef.filter.maskBits = Constants.CAT_WALL | Constants.CAT_EDGE;
+        fdef.filter.groupIndex = 1;
         body.createFixture(fdef).setUserData("Player");
 
         //Setting LinearDamping

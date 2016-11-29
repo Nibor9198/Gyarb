@@ -19,7 +19,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import se.boregrim.gyarb.Game;
+import se.boregrim.gyarb.entities.Actor;
 import se.boregrim.gyarb.entities.Box;
+
 import se.boregrim.gyarb.entities.Entity;
 import se.boregrim.gyarb.entities.Player;
 
@@ -206,6 +208,8 @@ public class GameScreen implements Screen {
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
                 createBox( (int) (player.body.getPosition().x * PPM),(int)(player.body.getPosition().y *PPM));
+            }if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
+                new Actor(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM));
             }
         }
 
@@ -272,7 +276,7 @@ public class GameScreen implements Screen {
         new Box(world,x,y);
     }
 
-
+    //Getters and Setters
     public FitViewport getViewport(){
         return vp;
     }
