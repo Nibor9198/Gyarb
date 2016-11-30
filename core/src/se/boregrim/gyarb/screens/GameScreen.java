@@ -1,5 +1,6 @@
 package se.boregrim.gyarb.screens;
 
+import box2dLight.ConeLight;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
@@ -105,9 +106,14 @@ public class GameScreen implements Screen {
 
         //Lighting
         rayHandler = new RayHandler(world);
+        rayHandler.diffuseBlendFunc.set(GL20.GL_SRC_COLOR,GL20.GL_DST_COLOR);
+        rayHandler.setAmbientLight(0.04f);
+        //PointLight p = new PointLight(rayHandler, 2000, Color.CYAN, 8,0,0);
+        ConeLight p = new ConeLight(rayHandler,1000,Color.CYAN,8,0,0,0, (float) (75));
 
-        PointLight p = new PointLight(rayHandler, 2000, Color.CYAN, 8, 0, 0);
         p.attachToBody(player.body);
+        //p.setSoft(true);
+        //p.setSoftnessLength(500000);
 
         Filter filter = new Filter();
         filter.groupIndex = -1;
@@ -195,7 +201,6 @@ public class GameScreen implements Screen {
 
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)/*&& player.body.getLinearVelocity().x <= 2f */) {
                 vX += speed;
-
             }
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) /*&& player.body.getLinearVelocity().x >= -2f*/) {
                 vX += -speed;
@@ -209,7 +214,7 @@ public class GameScreen implements Screen {
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
                 createBox( (int) (player.body.getPosition().x * PPM),(int)(player.body.getPosition().y *PPM));
             }if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
-                new Actor(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM));
+                //new Actor(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM));
             }
         }
 

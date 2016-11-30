@@ -1,6 +1,8 @@
 package se.boregrim.gyarb.entities;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import se.boregrim.gyarb.screens.GameScreen;
@@ -16,19 +18,19 @@ import static se.boregrim.gyarb.utils.Constants.PPM;
 public class Actor extends Sprite implements Entity {
     GameScreen gs;
     World world;
-    Body body;
-    public Actor(GameScreen gs, int x, int y) {
+    public Body body;
+    public Actor(GameScreen gs,int x, int y) {
         this.gs = gs;
         world = gs.getWorld();
+        //this.body = body;
         //body = gs.createEBody(0, x,y,CAT_ENEMY, CAT_EDGE);
 
         createBody(x,y);
         createFixture(new CircleShape(),12,20,Constants.CAT_ENEMY ,Constants.CAT_WALL | Constants.CAT_EDGE, 1);
-        createCollisionSensor();
+        createCollisionSensor((float) (Math.PI /2));
 
         //Setting LinearDamping
-        body.setLinearDamping(3f);
-        setBounds(body.getPosition().x, body.getPosition().y,32/PPM,32/PPM);
+
     }
     private void createBody(int x , int y) {
         //Creating player body
@@ -37,6 +39,8 @@ public class Actor extends Sprite implements Entity {
         bdef.position.set(x / PPM, y / PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bdef);
+        body.setLinearDamping(3f);
+        setBounds(body.getPosition().x, body.getPosition().y,32/PPM,32/PPM);
     }
     private void createFixture(CircleShape shape, float radius, float density, int catBits, int maskBits, int groupIndex) {
         //Creating Player fixture
@@ -49,14 +53,8 @@ public class Actor extends Sprite implements Entity {
         fdef.filter.maskBits = (short) maskBits;
         fdef.filter.groupIndex = (short) groupIndex;
         body.createFixture(fdef).setUserData("Player");
-
-
-
-
-
-
     }
-    private void createCollisionSensor(){
+    private void createCollisionSensor(float angle){
         //Creating Hit Sensor fixture
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -64,7 +62,7 @@ public class Actor extends Sprite implements Entity {
         float radius = 20 / PPM;
         Vector2 verticles[] = new Vector2[7];
         verticles[0] = new Vector2(0/PPM,0/PPM);
-        float angle = (float) (Math.PI /2);
+        //float angle = (float) (Math.PI /2);
         //System.out.println(verticles[1] = new Vector2((float) Math.cos(angle) * radius ,(float) Math.sin(angle) * radius));
         //verticles[2] = new Vector2((float) Math.cos(angle/2) * radius ,(float) Math.sin(angle/2) * radius);
         for (int i = 0; i < verticles.length -1; i++) {
@@ -90,13 +88,22 @@ public class Actor extends Sprite implements Entity {
 
 
     }
+
+    public void setSprite(String name){
+        setTexture((Texture) gs.getGame().getAssets().getAssetManager().get(name));
+    }
     @Override
     public void update(float delta) {
-
+        setCenter(body.getPosition().x,body.getPosition().y);
+        setOrigin(getWidth()/2,getHeight()/2);
     }
 
     @Override
     public void render(float delta) {
-
+        SpriteBatch batch = gs.getBatch();
+        batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
+        batch.begin();
+        draw(batch);
+        batch.end();
     }
 }

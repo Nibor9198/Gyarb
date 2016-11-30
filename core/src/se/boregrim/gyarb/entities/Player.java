@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -16,23 +17,25 @@ import static se.boregrim.gyarb.utils.Constants.PPM;
 /**
  * Created by Robin on 2016-11-09.
  */
-public class Player extends Sprite implements Entity{
+public class Player extends Actor implements Entity{
     public World world;
     public Body body;
     private GameScreen gs;
     private AssetManager manager;
     public Sprite legs;
+    public box2dLight.PointLight light;
 
     public Player(GameScreen gs, int x, int y){
-        super((Texture) gs.getGame().getAssets().getAssetManager().get("PlayerSprite.png"));
+        super(gs,x,y);
+        setSprite("PlayerSprite.png");
         this.gs = gs;
         world = gs.getWorld();
         manager = gs.getGame().getAssets().getAssetManager();
 
 
-
-
-        define(x,y);
+        //basic(gs,x,y);
+        body = super.body;
+        //define(x,y);
     }
     public void define(int x, int y){
 
@@ -111,10 +114,10 @@ public class Player extends Sprite implements Entity{
 
     @Override
     public void update(float delta) {
-        //Putting sprite
-        setCenter(body.getPosition().x,body.getPosition().y);
-        setOrigin(getWidth()/2,getHeight()/2);
-
+        //Putting sprite ontop of the physical body
+        //setCenter(body.getPosition().x,body.getPosition().y);
+        // setOrigin(getWidth()/2,getHeight()/2);
+        super.update(delta);
         //setBounds(0,0,32/PPM, 32/PPM);
         playerFacing(Gdx.input.getX(),Gdx.input.getY());
 
@@ -123,11 +126,7 @@ public class Player extends Sprite implements Entity{
 
     @Override
     public void render(float delta) {
-        SpriteBatch batch = gs.getBatch();
-        batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
-        batch.begin();
-        draw(batch);
-        batch.end();
+
     }
 
 
