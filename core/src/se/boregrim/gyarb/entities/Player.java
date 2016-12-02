@@ -23,78 +23,23 @@ public class Player extends Actor implements Entity{
     private GameScreen gs;
     private AssetManager manager;
     public Sprite legs;
-    public box2dLight.PointLight light;
 
     public Player(GameScreen gs, int x, int y){
-        super(gs,x,y);
-        setSprite("PlayerSprite.png");
+        super(gs);
         this.gs = gs;
         world = gs.getWorld();
         manager = gs.getGame().getAssets().getAssetManager();
 
 
+        createBody(x,y,3,0);
+        createFixture(new CircleShape(),12,20,Constants.CAT_ENEMY ,Constants.CAT_WALL | Constants.CAT_EDGE, 1);
+        createCollisionSensor(20,(float) (Math.PI /2));
+
+        setSprite("PlayerSprite.png",32,32);
+
         //basic(gs,x,y);
         body = super.body;
         //define(x,y);
-    }
-    public void define(int x, int y){
-
-        //Creating player body
-        BodyDef bdef = new BodyDef();
-
-        bdef.position.set(x / PPM, y / PPM);
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        body = world.createBody(bdef);
-
-        //Creating Player fixture
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(12 / PPM);
-        fdef.shape = shape;
-        fdef.density = 20;
-        fdef.filter.categoryBits = Constants.CAT_PLAYER;
-        fdef.filter.maskBits = Constants.CAT_WALL | Constants.CAT_EDGE;
-        fdef.filter.groupIndex = 1;
-        body.createFixture(fdef).setUserData("Player");
-
-        //Setting LinearDamping
-        body.setLinearDamping(3f);
-
-        //Creating Hit Sensor fixture
-        PolygonShape shape2 = new PolygonShape();
-
-
-
-
-
-        float radius = 20 / PPM;
-        Vector2 verticles[] = new Vector2[7];
-        verticles[0] = new Vector2(0/PPM,0/PPM);
-        float angle = (float) (Math.PI /2);
-        //System.out.println(verticles[1] = new Vector2((float) Math.cos(angle) * radius ,(float) Math.sin(angle) * radius));
-        //verticles[2] = new Vector2((float) Math.cos(angle/2) * radius ,(float) Math.sin(angle/2) * radius);
-        for (int i = 0; i < verticles.length -1; i++) {
-            float part = angle * 2 / (verticles.length -2);
-            System.out.println(part);
-            System.out.println(verticles[i+1] = new Vector2((float) Math.cos(angle - part * i) * radius ,(float) Math.sin(angle - part * i) * radius));
-        }
-
-
-        //verticles[3] = new Vector2((float) Math.cos(-angle/2) * radius ,(float) Math.sin(-angle/2) * radius);
-        //System.out.println(verticles[4] = new Vector2((float) Math.cos(-angle) * radius,(float) Math.sin(-angle) * radius));
-        shape2.setRadius(radius);
-        shape2.set(verticles);
-        fdef.shape = shape2;
-        fdef.density = 0;
-        fdef.filter.groupIndex = -1;
-        fdef.isSensor = true;
-
-        body.createFixture(fdef).setUserData("hitSensor");
-
-
-        //Set bounds
-        setBounds(body.getPosition().x, body.getPosition().y,32/PPM,32/PPM);
-
     }
 
     // X and y describes a point towards which the player should be facing, this usually is the mouse

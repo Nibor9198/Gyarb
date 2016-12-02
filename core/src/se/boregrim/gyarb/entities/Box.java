@@ -26,6 +26,7 @@ public class Box implements Entity {
         fdef.shape = shape;
         fdef.restitution = 0.01f;
         fdef.density = 20;
+        fdef.filter.groupIndex= 1;
 
 
         body.createFixture(fdef);

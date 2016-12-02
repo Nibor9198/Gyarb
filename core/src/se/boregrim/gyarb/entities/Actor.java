@@ -1,8 +1,10 @@
 package se.boregrim.gyarb.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import se.boregrim.gyarb.screens.GameScreen;
@@ -19,30 +21,29 @@ public class Actor extends Sprite implements Entity {
     GameScreen gs;
     World world;
     public Body body;
-    public Actor(GameScreen gs,int x, int y) {
+    public Actor(GameScreen gs) {
         this.gs = gs;
         world = gs.getWorld();
         //this.body = body;
         //body = gs.createEBody(0, x,y,CAT_ENEMY, CAT_EDGE);
 
-        createBody(x,y);
-        createFixture(new CircleShape(),12,20,Constants.CAT_ENEMY ,Constants.CAT_WALL | Constants.CAT_EDGE, 1);
-        createCollisionSensor((float) (Math.PI /2));
-
-        //Setting LinearDamping
+        //createBody(x,y);
+        //createFixture(new CircleShape(),12,20,Constants.CAT_ENEMY ,Constants.CAT_WALL | Constants.CAT_EDGE, 1);
+        //createCollisionSensor((float) (Math.PI /2));
 
     }
-    private void createBody(int x , int y) {
+    public void createBody(int x, int y, float lDamping, float aDamping) {
         //Creating player body
         BodyDef bdef = new BodyDef();
 
         bdef.position.set(x / PPM, y / PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bdef);
-        body.setLinearDamping(3f);
-        setBounds(body.getPosition().x, body.getPosition().y,32/PPM,32/PPM);
+        body.setLinearDamping(lDamping);
+        body.setAngularDamping(aDamping);
+
     }
-    private void createFixture(CircleShape shape, float radius, float density, int catBits, int maskBits, int groupIndex) {
+    public void createFixture(CircleShape shape, float radius, float density, int catBits, int maskBits, int groupIndex) {
         //Creating Player fixture
         FixtureDef fdef = new FixtureDef();
         shape = new CircleShape();
@@ -54,26 +55,20 @@ public class Actor extends Sprite implements Entity {
         fdef.filter.groupIndex = (short) groupIndex;
         body.createFixture(fdef).setUserData("Player");
     }
-    private void createCollisionSensor(float angle){
+    public void createCollisionSensor(float radius,float angle){
         //Creating Hit Sensor fixture
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
-        float radius = 20 / PPM;
+        radius = radius / PPM;
         Vector2 verticles[] = new Vector2[7];
         verticles[0] = new Vector2(0/PPM,0/PPM);
-        //float angle = (float) (Math.PI /2);
-        //System.out.println(verticles[1] = new Vector2((float) Math.cos(angle) * radius ,(float) Math.sin(angle) * radius));
-        //verticles[2] = new Vector2((float) Math.cos(angle/2) * radius ,(float) Math.sin(angle/2) * radius);
         for (int i = 0; i < verticles.length -1; i++) {
             float part = angle * 2 / (verticles.length -2);
             System.out.println(part);
             System.out.println(verticles[i+1] = new Vector2((float) Math.cos(angle - part * i) * radius ,(float) Math.sin(angle - part * i) * radius));
         }
 
-
-        //verticles[3] = new Vector2((float) Math.cos(-angle/2) * radius ,(float) Math.sin(-angle/2) * radius);
-        //System.out.println(verticles[4] = new Vector2((float) Math.cos(-angle) * radius,(float) Math.sin(-angle) * radius));
         shape.setRadius(radius);
         shape.set(verticles);
         fdef.shape = shape;
@@ -88,9 +83,21 @@ public class Actor extends Sprite implements Entity {
 
 
     }
-
-    public void setSprite(String name){
+    public void facePosition(float x, float y){
+        //Calculating delta
+        x = x - body.getPosition().x;
+        y = y - body.getPosition().y;
+        //Calculating the angle
+        float angle =  -MathUtils.atan2(y,x);
+        //Rotating the Body
+        body.setTransform(body.getPosition().x,body.getPosition().y,angle);
+        //Rotating Sprite
+        setRotation((float) ((angle *360/(2*Math.PI))+90));
+    }
+    //Set Sprite texture and size
+    public void setSprite(String name, int  height, int  width){
         setTexture((Texture) gs.getGame().getAssets().getAssetManager().get(name));
+        setBounds(body.getPosition().x, body.getPosition().y,height/PPM,width/PPM);
     }
     @Override
     public void update(float delta) {
