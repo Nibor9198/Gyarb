@@ -213,7 +213,7 @@ public class GameScreen implements Screen {
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
                 createBox( (int) (player.body.getPosition().x * PPM),(int)(player.body.getPosition().y *PPM));
             }if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
-                new Enemy(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM));
+                addEntity(new Enemy(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM),25));
             }
         }
 
@@ -265,6 +265,9 @@ public class GameScreen implements Screen {
         otmr.dispose();
 
 
+    }
+    public void addEntity(Entity e){
+        entities.add(e);
     }
     public void updateEntities(float delta){
         for (Entity e:entities) {

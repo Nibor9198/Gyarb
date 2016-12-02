@@ -20,10 +20,14 @@ import static se.boregrim.gyarb.utils.Constants.PPM;
 public class Actor extends Sprite implements Entity {
     GameScreen gs;
     World world;
+
+    boolean hasBody;
     public Body body;
     public Actor(GameScreen gs) {
         this.gs = gs;
         world = gs.getWorld();
+
+        hasBody = false;
         //this.body = body;
         //body = gs.createEBody(0, x,y,CAT_ENEMY, CAT_EDGE);
 
@@ -41,12 +45,11 @@ public class Actor extends Sprite implements Entity {
         body = world.createBody(bdef);
         body.setLinearDamping(lDamping);
         body.setAngularDamping(aDamping);
-
+        hasBody = true;
     }
     public void createFixture(CircleShape shape, float radius, float density, int catBits, int maskBits, int groupIndex) {
         //Creating Player fixture
         FixtureDef fdef = new FixtureDef();
-        shape = new CircleShape();
         shape.setRadius(radius / PPM);
         fdef.shape = shape;
         fdef.density = density;
@@ -101,7 +104,8 @@ public class Actor extends Sprite implements Entity {
     }
     @Override
     public void update(float delta) {
-        setCenter(body.getPosition().x,body.getPosition().y);
+        if(hasBody && body !=null)
+            setCenter(body.getPosition().x,body.getPosition().y);
         setOrigin(getWidth()/2,getHeight()/2);
     }
 
@@ -110,7 +114,7 @@ public class Actor extends Sprite implements Entity {
         SpriteBatch batch = gs.getBatch();
         batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
         batch.begin();
-        draw(batch);
+        //draw(batch);
         batch.end();
     }
 }

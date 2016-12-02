@@ -32,8 +32,11 @@ public class MainMenu implements Screen {
     AssetManager manager;
     Game game;
     Stage stage;
+    VerticalGroup group;
 
-
+    Image bg;
+    Label label;
+    TextButton start, exit;
 
 
     public MainMenu(Game g) {
@@ -49,23 +52,26 @@ public class MainMenu implements Screen {
 
 
         // Initiating ui
-        Image bg = new Image((Texture) manager.get("menuBackground.png"));
-        Label label = new Label("Epic Title",game.getSkin());
-        TextButton start = new TextButton("Start game", game.getSkin(), "default");
-        TextButton exit = new TextButton("Exit game", game.getSkin(), "default");
+
+
+        bg = new Image((Texture) manager.get("menuBackground.png"));
+        label = new Label("Epic Title",game.getSkin());
+        start = new TextButton("Start game", game.getSkin(), "default");
+        exit = new TextButton("Exit game", game.getSkin(), "default");
         start.setTouchable(Touchable.enabled);
         //exit.setTouchable(Touchable.enabled);
 
 
 
+        VerticalGroup group = new VerticalGroup();
+        group.setFillParent(true);
+        //Adding Actors to group
+        group.addActor(bg);
+        group.addActor(label);
+        group.addActor(start);
+        group.addActor(exit);
 
-        //Ádding Actors to stage
-        stage.addActor(bg);
-        stage.addActor(label);
-        stage.addActor(start);
-        stage.addActor(exit);
-
-        
+        stage.addActor(group);
 
         //Listeners
         start.addListener( new ClickListener(){
@@ -92,16 +98,16 @@ public class MainMenu implements Screen {
         //Referencing scale of the stage
         float width = stage.getWidth();
         float height = stage.getHeight();
-        //Getting actors
-        Array<Actor> a = stage.getActors();
+
         float w = 150;
         float h = 50;
 
         //This Arrays index is based the order actors where added to the stage
-        a.get(0).setBounds(0,0,width, height);
-        a.get(1).setBounds((width-w)*0.5f,height*0.75f,w,h);
-        a.get(2).setBounds((width-w)*0.5f,height*0.75f-h,w,h);
-        a.get(3).setBounds((width-w)*0.5f,height*0.75f-2*h,w,h);
+        bg.setBounds(0,0,width, height);
+        label.setBounds((width-w)*0.5f,height*0.75f,w,h);
+        start.setBounds((width-w)*0.5f,height*0.75f-h,w,h);
+        exit.setBounds((width-w)*0.5f,height*0.75f-2*h,w,h);
+
 
 
         //Draw the stage
