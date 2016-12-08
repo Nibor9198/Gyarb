@@ -1,11 +1,19 @@
 package se.boregrim.gyarb.screens;
 
 import box2dLight.ConeLight;
-import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ai.pfa.Connection;
+import com.badlogic.gdx.ai.pfa.HierarchicalGraph;
+import com.badlogic.gdx.ai.pfa.HierarchicalPathFinder;
+import com.badlogic.gdx.ai.pfa.PathFinder;
+import com.badlogic.gdx.ai.steer.behaviors.Arrive;
+import com.badlogic.gdx.ai.steer.behaviors.Face;
+import com.badlogic.gdx.ai.steer.behaviors.FollowPath;
+import com.badlogic.gdx.ai.steer.behaviors.Seek;
+import com.badlogic.gdx.ai.steer.utils.Path;
 import com.badlogic.gdx.graphics.*;
 
 import com.badlogic.gdx.graphics.Color;
@@ -18,17 +26,16 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import se.boregrim.gyarb.Game;
 import se.boregrim.gyarb.entities.*;
+import se.boregrim.gyarb.managers.MapManager;
 import se.boregrim.gyarb.utils.Constants;
 
 
-import java.awt.*;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import static com.badlogic.gdx.utils.JsonValue.ValueType.object;
 import static se.boregrim.gyarb.utils.Constants.*;
 
 /**
@@ -46,13 +53,11 @@ public class GameScreen implements Screen {
     private FitViewport vp;
 
     //Batch
-    SpriteBatch batch;
+    private SpriteBatch batch;
 
 
     //Map rendering
-    private TiledMap map;
-    private String mapRef;
-    private TmxMapLoader maploader;
+    private MapManager mapManager;
     private OrthogonalTiledMapRenderer otmr;
 
     //Box2d
@@ -62,6 +67,7 @@ public class GameScreen implements Screen {
 
     //Lighting
     private RayHandler rayHandler;
+    public boolean lightsOn;
 
 
     //Ui
@@ -85,28 +91,24 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
 
         //Load map
-        mapRef = "Maps/TestMap.tmx";
-        maploader = new TmxMapLoader();
-        map = maploader.load(mapRef);
-        otmr = new OrthogonalTiledMapRenderer(map, 1 / PPM);
+        MapManager.loadMap("Maps/TestMap2.tmx", world);
+        otmr = MapManager.otmr;
 
         //Box2d
         world = new World(new Vector2(),true);
         b2dr = new Box2DDebugRenderer();
-        Body body;
-        BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
+
 
         player = new Player(this, (int)vp.getWorldWidth()/2,(int)vp.getWorldHeight()/2);
         entities.add(player);
 
         //Lighting
-        rayHandler = new RayHandler(world);
+        rayHandler = new RayHandler(world, (int) (3*PPM), (int) (3*PPM));
+
         rayHandler.diffuseBlendFunc.set(GL20.GL_SRC_COLOR,GL20.GL_DST_COLOR);
-        rayHandler.setAmbientLight(0.04f);
+        rayHandler.setAmbientLight(0.02f);
         //PointLight p = new PointLight(rayHandler, 2000, Color.CYAN, 8,0,0);
-        ConeLight p = new ConeLight(rayHandler,1000,Color.CYAN,8,0,0,0, (float) (75));
+        ConeLight p = new ConeLight(rayHandler,1000,Color.CYAN,10,0,0,0, (float) (40));
 
         p.attachToBody(player.body);
         //p.setSoft(true);
@@ -120,22 +122,7 @@ public class GameScreen implements Screen {
 
 
 
-        // Create box2d objects from the map file (Collision)
-        for (MapObject mapObject : map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX()+ rect.getWidth()/ 2) / PPM ,(rect.getY() + rect.getHeight()/ 2) / PPM);
-            body = world.createBody(bdef);
-                //PPM = Pixels Per Meter
-            shape.setAsBox(rect.getWidth() / 2/ PPM, rect.getHeight() / 2/ PPM);
-            fdef.shape = shape;
-            fdef.filter.categoryBits = CAT_EDGE;
-            fdef.filter.maskBits = CAT_PLAYER | CAT_ENEMY | CAT_ENTITY;
-            filter.groupIndex = -1;
-            //fdef.filter.groupIndex = 1;
 
-            body.createFixture(fdef);
-        }
 
         //Ui
         ui = new GameUiScreen(this);
@@ -145,7 +132,7 @@ public class GameScreen implements Screen {
     public void update(float delta){
 
 
-        world.step( 1/60f , 6, 2);
+        world.step( delta, 6, 2);
 
         updateEntities(delta);
 
@@ -176,12 +163,14 @@ public class GameScreen implements Screen {
 
         //Render light
         rayHandler.setCombinedMatrix(cam);
-        rayHandler.updateAndRender();
+        if(getLightsOn())
+            rayHandler.updateAndRender();
 
 
 
         //Ui
-        ui.render(delta);
+        if(!paused)
+            ui.render(delta);
 
     }
     public void handleInput(float delta){
@@ -192,7 +181,6 @@ public class GameScreen implements Screen {
         float maxVel = 15;
         float vX = 0 ;
         float vY = 0 ;
-
 
 
         // Player Controls
@@ -210,20 +198,46 @@ public class GameScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) /*&& player.body.getLinearVelocity().y >= -2f*/) {
                 vY += -speed;
             }
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-                createBox( (int) (player.body.getPosition().x * PPM),(int)(player.body.getPosition().y *PPM));
-            }if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
-                addEntity(new Enemy(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM),25));
+            //Moving the player
+            Vector2 v = player.body.getLinearVelocity();
+            maxVel = vX == 0 || vY == 0 ? maxVel: (float) Math.sqrt((Math.pow(maxVel,2))/2) ;
+            //System.out.println(maxVel);
+            //System.out.println((float) Math.sqrt((Math.pow(maxVel*PPM,2))/2));
+            player.body.applyForceToCenter( v.x >=0 ? (v.x < maxVel ? vX : 0) : (v.x > -maxVel ? vX : 0) , v.y >=0 ? (v.y < maxVel ? vY : 0) : (v.y > -maxVel? vY : 0),true);
+            //System.out.println(Math.sqrt(Math.pow(v.x,2) + Math.pow(v.y,2)));
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                createBox((int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM));
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.O)){
+                toggleLightsOn();
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.R)){
+                player.body.setTransform(5/PPM, 5/PPM,player.body.getAngle());
+            }if(Gdx.input.isKeyPressed(Input.Keys.P)){
+                player.body.setTransform(-5/PPM, -5/PPM,player.body.getAngle());
+            }
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
+
+                AiEntity e;
+                addEntity(e = new TestEnemy(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM),25));
+
+                //Temporary behaviour
+
+
+                Arrive<Vector2> arrive = new Arrive<Vector2>(e,player)
+                    .setTimeToTarget(0.01f)
+                    .setArrivalTolerance(2f)
+                    .setDecelerationRadius(15);
+
+                Seek<Vector2> seek = new Seek<Vector2>(e,player);
+
+
+
+                e.setBehavior(seek);
             }
         }
-
-        //Moving the player
-        Vector2 v = player.body.getLinearVelocity();
-        maxVel = vX == 0 || vY == 0 ? maxVel: (float) Math.sqrt((Math.pow(maxVel,2))/2) ;
-        //System.out.println(maxVel);
-        //System.out.println((float) Math.sqrt((Math.pow(maxVel*PPM,2))/2));
-        player.body.applyForceToCenter( v.x >=0 ? (v.x < maxVel ? vX : 0) : (v.x > -maxVel ? vX : 0) , v.y >=0 ? (v.y < maxVel ? vY : 0) : (v.y > -maxVel? vY : 0),true);
-        //System.out.println(Math.sqrt(Math.pow(v.x,2) + Math.pow(v.y,2)));
 
 
         //Other input
@@ -261,8 +275,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         rayHandler.dispose();
-        map.dispose();
-        otmr.dispose();
+        mapManager.dispose();
 
 
     }
@@ -298,5 +311,15 @@ public class GameScreen implements Screen {
 
     public SpriteBatch getBatch() {
         return batch;
+    }
+
+    public void setLightsOn(boolean lightsOn) {
+        this.lightsOn = lightsOn;
+    }
+    public void toggleLightsOn(){
+        setLightsOn(getLightsOn()? false : true);
+    }
+    public boolean getLightsOn(){
+        return lightsOn;
     }
 }

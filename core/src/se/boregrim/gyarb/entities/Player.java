@@ -1,6 +1,7 @@
 package se.boregrim.gyarb.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,13 +12,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import se.boregrim.gyarb.screens.GameScreen;
 import se.boregrim.gyarb.utils.Constants;
+import se.boregrim.gyarb.utils.SteeringUtils;
 
 import static se.boregrim.gyarb.utils.Constants.PPM;
 
 /**
  * Created by Robin on 2016-11-09.
  */
-public class Player extends Actor implements Entity{
+public class Player extends Actor implements Entity, Location<Vector2> {
     public World world;
     public Body body;
     private GameScreen gs;
@@ -39,6 +41,8 @@ public class Player extends Actor implements Entity{
 
         //basic(gs,x,y);
         body = super.body;
+
+        setSprite("PlayerSprite.png",32,32);
         //define(x,y);
     }
 
@@ -61,7 +65,7 @@ public class Player extends Actor implements Entity{
     public void update(float delta) {
         //Putting sprite ontop of the physical body
         //setCenter(body.getPosition().x,body.getPosition().y);
-        // setOrigin(getWidth()/2,getHeight()/2);
+        //setOrigin(getWidth()/2,getHeight()/2);
         super.update(delta);
         //setBounds(0,0,32/PPM, 32/PPM);
         playerFacing(Gdx.input.getX(),Gdx.input.getY());
@@ -69,10 +73,34 @@ public class Player extends Actor implements Entity{
         //body;
     }
 
+    //Location
     @Override
-    public void render(float delta) {
+    public Vector2 getPosition() {
+        return body.getPosition();
+    }
+
+    @Override
+    public float getOrientation() {
+        return 0;
+    }
+
+    @Override
+    public void setOrientation(float orientation) {
 
     }
 
+    @Override
+    public float vectorToAngle(Vector2 vector) {
+        return SteeringUtils.vectorToAngle(vector);
+    }
 
+    @Override
+    public Vector2 angleToVector(Vector2 outVector, float angle) {
+        return SteeringUtils.angleToVector(outVector, angle);
+    }
+
+    @Override
+    public Location<Vector2> newLocation() {
+        return null;
+    }
 }

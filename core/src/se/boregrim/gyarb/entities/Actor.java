@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import se.boregrim.gyarb.screens.GameScreen;
 import se.boregrim.gyarb.utils.Constants;
@@ -24,6 +25,7 @@ public class Actor extends Sprite implements Entity {
     boolean hasBody;
     public Body body;
     public Actor(GameScreen gs) {
+        super();
         this.gs = gs;
         world = gs.getWorld();
 
@@ -38,9 +40,11 @@ public class Actor extends Sprite implements Entity {
     }
     public void createBody(int x, int y, float lDamping, float aDamping) {
         //Creating player body
+
         BodyDef bdef = new BodyDef();
 
         bdef.position.set(x / PPM, y / PPM);
+
         bdef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bdef);
         body.setLinearDamping(lDamping);
@@ -68,8 +72,8 @@ public class Actor extends Sprite implements Entity {
         verticles[0] = new Vector2(0/PPM,0/PPM);
         for (int i = 0; i < verticles.length -1; i++) {
             float part = angle * 2 / (verticles.length -2);
-            System.out.println(part);
-            System.out.println(verticles[i+1] = new Vector2((float) Math.cos(angle - part * i) * radius ,(float) Math.sin(angle - part * i) * radius));
+            //.out.println(part);
+            verticles[i+1] = new Vector2((float) Math.cos(angle - part * i) * radius ,(float) Math.sin(angle - part * i) * radius);
         }
 
         shape.setRadius(radius);
@@ -86,6 +90,9 @@ public class Actor extends Sprite implements Entity {
 
 
     }
+    public void facePosition(Vector2 position){
+        facePosition(position.x, position.y);
+    }
     public void facePosition(float x, float y){
         //Calculating delta
         x = x - body.getPosition().x;
@@ -100,21 +107,29 @@ public class Actor extends Sprite implements Entity {
     //Set Sprite texture and size
     public void setSprite(String name, int  height, int  width){
         setTexture((Texture) gs.getGame().getAssets().getAssetManager().get(name));
-        setBounds(body.getPosition().x, body.getPosition().y,height/PPM,width/PPM);
+        setBounds(body.getPosition().x, body.getPosition().y,height*PPM,width*PPM);
+        System.out.println("Japp");
     }
     @Override
     public void update(float delta) {
-        if(hasBody && body !=null)
-            setCenter(body.getPosition().x,body.getPosition().y);
+        if(hasBody && body !=null) {
+            setCenter(body.getPosition().x , body.getPosition().y);
+
+        }
+        setCenter(0,0);
         setOrigin(getWidth()/2,getHeight()/2);
+        Vector3 v = gs.getViewport().getCamera().position;
+        v.set(getX()- v.x,getY()-v.y,v.z);
     }
 
     @Override
     public void render(float delta) {
-        SpriteBatch batch = gs.getBatch();
-        batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
-        batch.begin();
-        //draw(batch);
-        batch.end();
+        if(getTexture() != null) {
+            SpriteBatch batch = gs.getBatch();
+            batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
+            batch.begin();
+            draw(batch);
+            batch.end();
+        }
     }
 }

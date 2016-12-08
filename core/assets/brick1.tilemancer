@@ -1,0 +1,66 @@
+Tilemancer 0.2.1
+
+Color 45 7 0
+Color 53 6 0
+Color 91 16 0
+Color 96 0 0
+Color 117 21 0
+Color 173 34 19
+Color 0 0 0
+PaletteSave1 
+PaletteSave2 
+FileSave1 \Users\Robin\Documents\GitHub\Gyarb\core\assets
+FileSave2 brick1.tilemancer
+Indexed 0
+Size 32
+Camera 0 0
+Node {
+Name bricks.lua
+Position 228.485 184.417
+Parameter -3 -1 -1 0
+Parameter 3 1 -1 0
+Parameter 1 1 -1 0
+Parameter 1 1 -1 0
+Parameter 61 0 100 0
+Parameter 83 0 -1 0
+}
+Node {
+Name colorizer.lua
+Position 540.72 93.8772
+Ramp {
+Point 8 0 0.491183 0.20359
+Point 14 0 0.7114 0.327992
+Point 18 0 0.865748 0.423526
+Point 23 0 0.574649 0.580064
+Point 30 0 0.163986 1
+}
+Parameter 0 0 0 0
+Parameter 0 0 0 0
+Parameter 0 0.163986 1 5
+Connection 0 4 0
+}
+Node {
+Name lighting.lua
+Position 439.169 120.624
+Parameter -22 -1 -1 0
+Parameter 10 0 100 0
+Connection 0 0 0
+}
+Node {
+Name perlin_noise.lua
+Position 182.52 21.8825
+Parameter 0 -1 -1 0
+Parameter 2 2 -1 0
+Parameter 3 1 -1 0
+Parameter 200 100 -1 0
+Parameter 80 0 100 0
+Parameter 102 0 -1 0
+}
+Node {
+Name blend.lua
+Position 367.967 -2.75865
+Parameter 2 0 5 0
+Parameter 37 0 100 0
+Connection 0 2 0
+Connection 1 3 0
+}
