@@ -14,16 +14,16 @@ public class GraphGenerator {
         //Array<Node> nodes = new Array<Node>();
 
         TiledMapTileLayer tiles = (TiledMapTileLayer)map.getLayers().get(0);
-        int mapHeight = MapManager.mapTileHeight;
-        int mapWidth = MapManager.mapTileWitdh;
+        //int mapHeight = .mapTileHeight;
+        //int mapWidth = MapManager.mapTileWitdh;
 
-        for (int y = 0; y < mapHeight; y++) {
-            for (int x = 0; x < mapWidth; x++) {
-
-                //https://github.com/libgdx/gdx-ai/wiki/Hierarchical-Pathfinding
-                //https://www.youtube.com/watch?v=wu3vzR9k3QA
-            }
-        }
+        //for (int y = 0; y < mapHeight; y++) {
+        //    for (int x = 0; x < mapWidth; x++) {
+//
+        //        //https://github.com/libgdx/gdx-ai/wiki/Hierarchical-Pathfinding
+        //        //https://www.youtube.com/watch?v=wu3vzR9k3QA
+        //    }
+        //}
 
 
 
