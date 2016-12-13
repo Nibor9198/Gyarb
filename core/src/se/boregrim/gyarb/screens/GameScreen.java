@@ -90,13 +90,16 @@ public class GameScreen implements Screen {
         //Batch
         batch = new SpriteBatch();
 
-        //Load map
-        MapManager.loadMap("Maps/TestMap2.tmx", world);
-        otmr = MapManager.otmr;
-
         //Box2d
         world = new World(new Vector2(),true);
         b2dr = new Box2DDebugRenderer();
+
+        //Load map
+        MapManager mapManager = new MapManager();
+        mapManager.loadMap("Maps/TestMap2.tmx", world);
+        otmr = mapManager.otmr;
+
+
 
 
         player = new Player(this, (int)vp.getWorldWidth()/2,(int)vp.getWorldHeight()/2);

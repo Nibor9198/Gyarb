@@ -10,7 +10,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 import se.boregrim.gyarb.pathfinding.GraphImp;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import static se.boregrim.gyarb.utils.Constants.*;
 import static se.boregrim.gyarb.utils.Constants.CAT_ENEMY;
@@ -20,19 +22,20 @@ import static se.boregrim.gyarb.utils.Constants.CAT_ENTITY;
  * Created by Robin on 2016-12-08.
  */
 public class MapManager {
-    public static TiledMap map;
-    public static String mapRef;
-    public static TmxMapLoader maploader;
-    public static OrthogonalTiledMapRenderer otmr;
+    public  TiledMap map;
+    public  String mapRef;
+    public  TmxMapLoader maploader;
+    public  OrthogonalTiledMapRenderer otmr;
 
-    public static int mapTileWitdh;
-    public static int mapTileHeight;
-    public static int pixelWidth;
-    public static int pixelHeight;
-    public static GraphImp graph;
+    public  int mapTileWitdh;
+    public  int mapTileHeight;
+    public  int pixelWidth;
+    public  int pixelHeight;
+    public  GraphImp graph;
 
-    public static void  loadMap(String mapRef, World world){
-        MapManager.mapRef = mapRef;
+    public void  loadMap(String mapRef, World world){
+
+        this.mapRef = mapRef;
         maploader = new TmxMapLoader();
         map = maploader.load(mapRef);
         otmr = new OrthogonalTiledMapRenderer(map, 1 / PPM);
@@ -40,6 +43,8 @@ public class MapManager {
         Body body;
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
+
+
         PolygonShape shape = new PolygonShape();
         //GraphImp graph;
 
