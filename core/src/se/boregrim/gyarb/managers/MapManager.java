@@ -27,11 +27,11 @@ public class MapManager {
     public  TmxMapLoader maploader;
     public  OrthogonalTiledMapRenderer otmr;
 
-    public  int mapTileWitdh;
-    public  int mapTileHeight;
-    public  int pixelWidth;
-    public  int pixelHeight;
-    public  GraphImp graph;
+    public  static int mapTileWitdh;
+    public static int mapTileHeight;
+    public static int pixelWidth;
+    public static int pixelHeight;
+    public static GraphImp graph;
 
     public void  loadMap(String mapRef, World world){
 
