@@ -9,7 +9,7 @@ import se.boregrim.gyarb.managers.MapManager;
 /**
  * Created by Robin on 2016-12-08.
  */
-public class GraphGenerator {
+public class    GraphGenerator {
     public static Graph generateGraph(TiledMap map){
         Array<Node> nodes = new Array<Node>();
 

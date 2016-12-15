@@ -20,6 +20,7 @@ public class GameUiScreen implements Screen {
     private Stage stage;
     FitViewport vp;
     Game game;
+    Label label;
 
     public GameUiScreen(GameScreen gameScreen){
         gs = gameScreen;
@@ -28,7 +29,7 @@ public class GameUiScreen implements Screen {
         //vp = gs.getViewport();
         vp = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         stage = new Stage(vp);
-        Label label = new Label("Tjenare", game.getSkin());
+        label = new Label("Tjenare", game.getSkin());
 
         stage.addActor(label);
         Button b = new Button(game.getSkin());
@@ -46,6 +47,7 @@ public class GameUiScreen implements Screen {
 
         float x = vp.getScreenX();
         float y = vp.getScreenY();
+        label.setText(((GameScreen)game.getScreens().get("game")).getPlayer().getPosition().toString());
         stage.getActors().get(0).setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f/PPM,50f/PPM);
         //stage.getActors().get(1).setBounds(x-2f,y-2f,200,200);
         stage.act(delta);

@@ -315,6 +315,7 @@ public class GameScreen implements Screen {
     public SpriteBatch getBatch() {
         return batch;
     }
+    public Player getPlayer(){return player;}
 
     public void setLightsOn(boolean lightsOn) {
         this.lightsOn = lightsOn;
