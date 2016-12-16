@@ -10,7 +10,7 @@ import se.boregrim.gyarb.managers.MapManager;
  * Created by Robin on 2016-12-08.
  */
 public class    GraphGenerator {
-    public static Graph generateGraph(TiledMap map){
+    public static GraphImp generateGraph(TiledMap map){
         Array<Node> nodes = new Array<Node>();
 
         TiledMapTileLayer tiles = (TiledMapTileLayer)map.getLayers().get(0);

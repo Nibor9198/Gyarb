@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.GdxNativesLoader;
+import se.boregrim.gyarb.pathfinding.GraphGenerator;
 import se.boregrim.gyarb.pathfinding.GraphImp;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
@@ -85,7 +86,7 @@ public class MapManager {
             body.createFixture(fdef);
         }
 
-
+        graph = GraphGenerator.generateGraph(map);
 
     }
     public void dispose(){
