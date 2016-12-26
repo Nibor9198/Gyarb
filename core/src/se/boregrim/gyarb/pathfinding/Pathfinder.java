@@ -10,4 +10,5 @@ public class Pathfinder extends IndexedAStarPathFinder{
     public Pathfinder(IndexedGraph graph) {
         super(graph);
     }
+
 }

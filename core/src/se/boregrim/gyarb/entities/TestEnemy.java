@@ -10,13 +10,15 @@ import se.boregrim.gyarb.utils.Constants;
  */
 public class TestEnemy extends AiEntity{
 
-    public TestEnemy(GameScreen gs, int x, int y, float boundingRadius) {
-        super(gs, boundingRadius);
+    public TestEnemy(GameScreen gs, int x, int y, float boundingRadius, Player player) {
+        super(gs, boundingRadius, player);
 
         createBody(x,y,0,3);
         createFixture(new CircleShape(),12,10, Constants.CAT_ENEMY | Constants.CAT_ENTITY ,Constants.CAT_EDGE| Constants.CAT_LIGHT,1);
         createCollisionSensor(18, (float) (Math.PI/2));
 
+
+        defaultSteering();
     }
 
 }

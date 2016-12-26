@@ -17,7 +17,9 @@ import com.badlogic.gdx.ai.steer.utils.Path;
 import com.badlogic.gdx.graphics.*;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -31,6 +33,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import se.boregrim.gyarb.Game;
 import se.boregrim.gyarb.entities.*;
 import se.boregrim.gyarb.managers.MapManager;
+import se.boregrim.gyarb.pathfinding.Node;
 import se.boregrim.gyarb.utils.Constants;
 
 
@@ -70,6 +73,8 @@ public class GameScreen implements Screen {
     public boolean lightsOn;
 
 
+    Vector2 NodePos;
+
     //Ui
     GameUiScreen ui;
     public GameScreen(Game game){
@@ -80,7 +85,7 @@ public class GameScreen implements Screen {
         entities = new ArrayList<Entity>();
         paused = false;
 
-
+        NodePos = new Vector2(0,0);
 
         //Camera and Viewport
         cam = new OrthographicCamera();
@@ -144,6 +149,8 @@ public class GameScreen implements Screen {
 
         cam.update();
         otmr.setView(cam);
+
+
     }
     @Override
     public void render(float delta) {
@@ -169,7 +176,28 @@ public class GameScreen implements Screen {
         if(getLightsOn())
             rayHandler.updateAndRender();
 
-
+        // Node Debugrenderer
+        batch.begin();
+        Texture texture = new Texture(Gdx.files.internal("pic.png"));
+        batch.draw(texture,player.getX(),player.getY(),2,2);
+        Array<Connection<Node>> a = MapManager.graph.getNodeByPos((int)NodePos.x, (int)NodePos.y).getConnections();
+        System.out.println(a.size);
+        for (int i = 0; i < a.size; i++) {
+            int index = mapManager.graph.getIndex(a.get(i).getToNode());
+            int y = index / MapManager.mapTileWitdh;
+            int x = index % MapManager.mapTileWitdh;
+            System.out.println(x + " " + y);
+            batch.draw(texture,x,y, 10/PPM, 10/PPM);
+        }
+        //for (int y = 0; y < MapManager.mapTileHeight; y++) {
+        //    for (int x = 0; x < MapManager.mapTileWitdh; x++) {
+        //        if((!MapManager.graph.getNodeByPos(x,y).equals(null))){
+        //            batch.draw(texture,x,y, 10/PPM, 10/PPM);
+        //        }
+//
+        //    }
+        //}
+        batch.end();
 
         //Ui
         if(!paused)
@@ -224,22 +252,14 @@ public class GameScreen implements Screen {
             if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
 
                 AiEntity e;
-                addEntity(e = new TestEnemy(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM),25));
+                addEntity(e = new TestEnemy(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM), 25, player));
 
                 //Temporary behaviour
 
 
-                Arrive<Vector2> arrive = new Arrive<Vector2>(e,player)
-                    .setTimeToTarget(0.01f)
-                    .setArrivalTolerance(2f)
-                    .setDecelerationRadius(15);
 
-                Seek<Vector2> seek = new Seek<Vector2>(e,player);
-
-
-
-                e.setBehavior(seek);
             }
+
         }
 
 
@@ -249,6 +269,18 @@ public class GameScreen implements Screen {
                 resume();
             else
                 pause();
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.UP)){
+            NodePos.y++;
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
+            NodePos.y--;
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
+            NodePos.x++;
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
+            NodePos.x--;
         }
 
 

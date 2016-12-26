@@ -9,11 +9,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import se.boregrim.gyarb.pathfinding.GraphGenerator;
 import se.boregrim.gyarb.pathfinding.GraphImp;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+
+import java.util.ArrayList;
 
 import static se.boregrim.gyarb.utils.Constants.*;
 import static se.boregrim.gyarb.utils.Constants.CAT_ENEMY;
@@ -34,12 +37,15 @@ public class MapManager {
     public static int pixelHeight;
     public static GraphImp graph;
 
+    public static ArrayList<Vector2> nonWalkablePos;
+
     public void  loadMap(String mapRef, World world){
 
         this.mapRef = mapRef;
         maploader = new TmxMapLoader();
         map = maploader.load(mapRef);
         otmr = new OrthogonalTiledMapRenderer(map, 1 / PPM);
+        nonWalkablePos = new ArrayList<Vector2>();
 
         Body body;
         BodyDef bdef = new BodyDef();
@@ -67,9 +73,11 @@ public class MapManager {
             fdef.filter.categoryBits = CAT_EDGE;
             fdef.filter.maskBits = CAT_PLAYER | CAT_ENEMY | CAT_ENTITY;
             fdef.filter.groupIndex = -1;
-            //fdef.filter.groupIndex = 1;
-
             body.createFixture(fdef);
+
+            addNonWalkable(rect);
+
+
         }
         for (MapObject mapObject : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
@@ -84,10 +92,19 @@ public class MapManager {
             fdef.filter.groupIndex = 1;
 
             body.createFixture(fdef);
+            addNonWalkable(rect);
         }
 
         graph = GraphGenerator.generateGraph(map);
 
+    }
+
+    private void addNonWalkable(Rectangle rect){
+        for (int y = 0; y <= Math.round(rect.getHeight()/mapTileHeight); y++) {
+            for (int x = 0; x <= Math.round(rect.getWidth()/mapTileWitdh); x++) {
+                nonWalkablePos.add(new Vector2(x+rect.getX(),y+rect.getY()));
+            }
+        }
     }
     public void dispose(){
         map.dispose();

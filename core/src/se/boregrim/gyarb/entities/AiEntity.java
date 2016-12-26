@@ -1,16 +1,28 @@
 package se.boregrim.gyarb.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.GdxAI;
+import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
+import com.badlogic.gdx.ai.fsm.StateMachine;
+import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.ai.pfa.PathFinder;
+import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
+import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.ai.steer.behaviors.ReachOrientation;
+import com.badlogic.gdx.ai.steer.behaviors.Seek;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import se.boregrim.gyarb.managers.MapManager;
+import se.boregrim.gyarb.pathfinding.HeuristicImp;
+import se.boregrim.gyarb.pathfinding.Node;
+import se.boregrim.gyarb.pathfinding.Path;
 import se.boregrim.gyarb.screens.GameScreen;
 import se.boregrim.gyarb.utils.Constants;
 import se.boregrim.gyarb.utils.SteeringUtils;
@@ -20,16 +32,28 @@ import se.boregrim.gyarb.utils.SteeringUtils;
  */
 public class AiEntity extends Actor  implements Steerable<Vector2>{
     boolean tagged;
+    Location<Vector2> target;
     float boundingRadius;
     float maxLinearSpeed, maxLinearAcceleration;
     float maxAngularSpeed, maxAngularAcceleration;
 
     SteeringBehavior<Vector2> behavior;
     SteeringAcceleration<Vector2> steeringOutput;
-    public AiEntity(GameScreen gs, float boundingRadius) {
+
+    Player player;
+
+    Arrive<Vector2> arrive;
+
+    //Pathfinding
+    DefaultStateMachine stateMachine;
+    IndexedAStarPathFinder pathFinder;
+    Path outpath;
+
+    public AiEntity(GameScreen gs, float boundingRadius, Player player) {
         super(gs);
 
-
+        this.player = player;
+        target = player;
 
         this.boundingRadius = boundingRadius;
 
@@ -43,7 +67,39 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
         steeringOutput = new SteeringAcceleration<Vector2>(new Vector2());
         //body.setUserData(this);
 
-        
+
+    }
+    public void defaultSteering(){
+        Arrive<Vector2> arrive = new Arrive<Vector2>(this, target)
+                .setTimeToTarget(0.01f)
+                .setArrivalTolerance(2f)
+                .setDecelerationRadius(15);
+
+        //Seek<Vector2> seek = new Seek<Vector2>(this ,player);
+
+
+
+        setBehavior(arrive);
+        PathfindInit();
+    }
+
+    private void PathfindInit(){
+
+        stateMachine = new DefaultStateMachine();
+        pathFinder = new IndexedAStarPathFinder(MapManager.graph,false);
+
+        int startX = (int) getPosition().x;
+        int startY = (int) getPosition().y;
+
+        int endX = (int) target.getPosition().x;
+        int endY = (int) target.getPosition().y;
+
+        Node startNode = MapManager.graph.getNodeByPos(startX, startY);
+        Node endNode = MapManager.graph.getNodeByPos(endX, endY);
+        outpath = new Path();
+        pathFinder.searchNodePath(startNode,endNode, new HeuristicImp(), outpath);
+        System.out.println(outpath.getCount());
+
     }
 
     @Override
@@ -52,6 +108,19 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
         if (behavior != null){
             behavior.calculateSteering(steeringOutput);
             applySteering(delta);
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.L)){
+            int startX = (int) getPosition().x;
+            int startY = (int) getPosition().y;
+
+            int endX = (int) target.getPosition().x;
+            int endY = (int) target.getPosition().y;
+
+            Node startNode = MapManager.graph.getNodeByPos(startX, startY);
+            Node endNode = MapManager.graph.getNodeByPos(endX, endY);
+            outpath = new Path();
+            pathFinder.searchNodePath(startNode,endNode, new HeuristicImp(), outpath);
+            System.out.println(outpath.getCount());
         }
     }
 

@@ -4,6 +4,9 @@ import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.Graph;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.utils.Array;
+import se.boregrim.gyarb.managers.MapManager;
+
+import java.util.ArrayList;
 
 /**
  * Created by Robin on 2016-12-08.
@@ -38,5 +41,11 @@ public class GraphImp implements IndexedGraph<Node>{
     @Override
     public Array<Connection<Node>> getConnections(Node fromNode) {
         return fromNode.getConnections();
+    }
+
+    public Array<Node> getNodes(){return nodes;}
+    public Node getNodeByPos(int x, int y){
+        return nodes.get(MapManager.mapTileWitdh * y + x);
+
     }
 }

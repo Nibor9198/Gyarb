@@ -8,6 +8,8 @@ import java.util.Iterator;
  * Created by robin.boregrim on 2016-12-16.
  */
 public class Path implements GraphPath {
+
+
     @Override
     public int getCount() {
         return 0;
