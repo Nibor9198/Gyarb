@@ -6,26 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ai.pfa.Connection;
-import com.badlogic.gdx.ai.pfa.HierarchicalGraph;
-import com.badlogic.gdx.ai.pfa.HierarchicalPathFinder;
-import com.badlogic.gdx.ai.pfa.PathFinder;
-import com.badlogic.gdx.ai.steer.behaviors.Arrive;
-import com.badlogic.gdx.ai.steer.behaviors.Face;
-import com.badlogic.gdx.ai.steer.behaviors.FollowPath;
-import com.badlogic.gdx.ai.steer.behaviors.Seek;
-import com.badlogic.gdx.ai.steer.utils.Path;
 import com.badlogic.gdx.graphics.*;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -177,27 +162,42 @@ public class GameScreen implements Screen {
             rayHandler.updateAndRender();
 
         // Node Debugrenderer
+
+
+
         batch.begin();
+
+        for (Vector2 pos : MapManager.nonWalkablePos) {
+            batch.draw(new Texture(Gdx.files.internal("pic2.png")),pos.x,pos.y, 10/PPM,10/PPM);
+
+        }
+
+
         Texture texture = new Texture(Gdx.files.internal("pic.png"));
         batch.draw(texture,player.getX(),player.getY(),2,2);
         Array<Connection<Node>> a = MapManager.graph.getNodeByPos((int)NodePos.x, (int)NodePos.y).getConnections();
-        System.out.println(a.size);
+        //System.out.println("size: " + a.size);
         for (int i = 0; i < a.size; i++) {
             int index = mapManager.graph.getIndex(a.get(i).getToNode());
-            int y = index / MapManager.mapTileWitdh;
-            int x = index % MapManager.mapTileWitdh;
-            System.out.println(x + " " + y);
+            int y = index / MapManager.mapTileWidth;
+            int x = index % MapManager.mapTileWidth;
+            //System.out.println(x + " " + y);
             batch.draw(texture,x,y, 10/PPM, 10/PPM);
         }
         //for (int y = 0; y < MapManager.mapTileHeight; y++) {
-        //    for (int x = 0; x < MapManager.mapTileWitdh; x++) {
+        //    for (int x = 0; x < MapManager.mapTileWidth; x++) {
         //        if((!MapManager.graph.getNodeByPos(x,y).equals(null))){
         //            batch.draw(texture,x,y, 10/PPM, 10/PPM);
         //        }
 //
         //    }
         //}
+
+
+
         batch.end();
+
+
 
         //Ui
         if(!paused)
@@ -277,10 +277,10 @@ public class GameScreen implements Screen {
             NodePos.y--;
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-            NodePos.x++;
+            NodePos.x--;
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
-            NodePos.x--;
+            NodePos.x++;
         }
 
 

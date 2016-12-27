@@ -1,7 +1,5 @@
 package se.boregrim.gyarb.managers;
 
-import com.badlogic.gdx.ai.pfa.PathFinder;
-import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -11,7 +9,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.GdxNativesLoader;
 import se.boregrim.gyarb.pathfinding.GraphGenerator;
 import se.boregrim.gyarb.pathfinding.GraphImp;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -31,7 +28,7 @@ public class MapManager {
     public  TmxMapLoader maploader;
     public  OrthogonalTiledMapRenderer otmr;
 
-    public  static int mapTileWitdh;
+    public  static int mapTileWidth;
     public static int mapTileHeight;
     public static int pixelWidth;
     public static int pixelHeight;
@@ -40,7 +37,6 @@ public class MapManager {
     public static ArrayList<Vector2> nonWalkablePos;
 
     public void  loadMap(String mapRef, World world){
-
         this.mapRef = mapRef;
         maploader = new TmxMapLoader();
         map = maploader.load(mapRef);
@@ -57,7 +53,7 @@ public class MapManager {
 
 
         MapProperties properties = map.getProperties();
-        mapTileWitdh = properties.get("width", Integer.class);
+        mapTileWidth = properties.get("width", Integer.class);
         mapTileHeight = properties.get("height", Integer.class);
 
         // Create box2d objects from the map file (Collision)
@@ -100,9 +96,12 @@ public class MapManager {
     }
 
     private void addNonWalkable(Rectangle rect){
-        for (int y = 0; y <= Math.round(rect.getHeight()/mapTileHeight); y++) {
-            for (int x = 0; x <= Math.round(rect.getWidth()/mapTileWitdh); x++) {
-                nonWalkablePos.add(new Vector2(x+rect.getX(),y+rect.getY()));
+        for (int y = 0; y < Math.round(rect.getHeight()/PPM); y++) {
+            for (int x = 0; x < Math.round(rect.getWidth()/PPM); x++) {
+                if(!(y < 2 && y > mapTileHeight-2 && x < 2 && x > mapTileWidth -2)) {
+                    System.out.println(x + rect.getX() + " " + y + rect.getY());
+                    nonWalkablePos.add(new Vector2(x + Math.round(rect.getX()/PPM), y +  Math.round(rect.getY()/PPM)));
+                }
             }
         }
     }

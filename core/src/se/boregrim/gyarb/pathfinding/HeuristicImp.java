@@ -12,11 +12,11 @@ public class HeuristicImp implements Heuristic<Node>{
         int startIndex = node.getIndex();
         int endIndex = endNode.getIndex();
 
-        int startY = startIndex / MapManager.mapTileWitdh;
-        int startX = startIndex % MapManager.mapTileWitdh;
+        int startY = startIndex / MapManager.mapTileWidth;
+        int startX = startIndex % MapManager.mapTileWidth;
 
-        int endY = endIndex / MapManager.mapTileWitdh;
-        int endX = endIndex % MapManager.mapTileWitdh;
+        int endY = endIndex / MapManager.mapTileWidth;
+        int endX = endIndex % MapManager.mapTileWidth;
 
         float distance = (float) Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
 
