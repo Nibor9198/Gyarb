@@ -89,20 +89,20 @@ public class    GraphGenerator {
                         targetNode.createConnection(upNode, 10);
                     }
 
-                    if (y != mapHeight - 1 && x != mapWidth - 1 && up != null) {
-                        Node Node = nodes.get(mapWidth * (y + 1) + x);
+                    if (y != mapHeight - 1 && x != mapWidth - 1 && upRight != null) {
+                        Node Node = nodes.get(mapWidth * (y + 1) + x + 1);
                         targetNode.createConnection(Node, 14);
                     }
-                    if (y != mapHeight - 1 && x != 0 && up != null) {
-                        Node Node = nodes.get(mapWidth * (y + 1) + x);
+                    if (y != mapHeight - 1 && x != 0 && upLeft != null) {
+                        Node Node = nodes.get(mapWidth * (y + 1) + x - 1);
                         targetNode.createConnection(Node, 14);
                     }
-                    if (y != 0 && x != mapWidth - 1 && up != null) {
-                        Node Node = nodes.get(mapWidth * (y + 1) + x);
+                    if (y != 0 && x != mapWidth - 1 && downRight != null) {
+                        Node Node = nodes.get(mapWidth * (y - 1) + x + 1);
                         targetNode.createConnection(Node, 14);
                     }
-                    if (y != 0 && x != 0 && up != null) {
-                        Node Node = nodes.get(mapWidth * (y + 1) + x);
+                    if (y != 0 && x != 0 && downLeft != null) {
+                        Node Node = nodes.get(mapWidth * (y - 1) + x - 1);
                         targetNode.createConnection(Node, 14);
                     }
 
