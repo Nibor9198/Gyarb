@@ -52,6 +52,7 @@ public class GameUiScreen implements Screen {
         //stage.getActors().get(1).setBounds(x-2f,y-2f,200,200);
         stage.act(delta);
         stage.draw();
+
     }
         public void update(float delta){
 

@@ -1,6 +1,7 @@
 package se.boregrim.gyarb.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import se.boregrim.gyarb.screens.GameScreen;
 import se.boregrim.gyarb.utils.Constants;
@@ -37,12 +39,12 @@ public class Player extends Actor implements Entity, Location<Vector2> {
         createFixture(new CircleShape(),12,20,Constants.CAT_ENEMY ,Constants.CAT_WALL | Constants.CAT_EDGE, 1);
         createCollisionSensor(20,(float) (Math.PI /2));
 
-        setSprite("PlayerSprite.png",32,32);
+        //setSprite("PlayerSprite.png",32,32);
 
         //basic(gs,x,y);
         body = super.body;
 
-        setSprite("PlayerSprite.png",32,32);
+        setSprite("title.png",32,32);
         //define(x,y);
     }
 
@@ -102,5 +104,65 @@ public class Player extends Actor implements Entity, Location<Vector2> {
     @Override
     public Location<Vector2> newLocation() {
         return null;
+    }
+
+    @Override
+    public void die() {
+        //Loose the game or loose one life
+    }
+    @Override
+    public void input(boolean paused){
+
+        //Setting variables for player movement
+        int speed = (int) (15 * PPM);
+        float maxVel = 15;
+        float vX = 0 ;
+        float vY = 0 ;
+
+
+        // Player Controls
+        if(!paused) {
+            Vector3 pos = gs.getViewport().getCamera().position;
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)/*&& player.body.getLinearVelocity().x <= 2f */) {
+                vX += speed;
+
+               // gs.getViewport().getCamera().position.x = gs.getViewport().getCamera().position.x + 2;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) /*&& player.body.getLinearVelocity().x >= -2f*/) {
+                vX += -speed;
+                //gs.getViewport().getCamera().position.x = gs.getViewport().getCamera().position.x - 2;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) /*&& player.body.getLinearVelocity().y <= 2f*/) {
+                vY += speed;
+                //gs.getViewport().getCamera().position.y = gs.getViewport().getCamera().position.y + 2;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) /*&& player.body.getLinearVelocity().y >= -2f*/) {
+                vY += -speed;
+               //gs.getViewport().getCamera().position.y = gs.getViewport().getCamera().position.y - 2;
+//                gs.getViewport().getCamera().position.y = getY();
+//                gs.getViewport().getCamera().position.x = getX();
+            }
+            //Moving the player
+            Vector2 v = body.getLinearVelocity();
+            maxVel = vX == 0 || vY == 0 ? maxVel: (float) Math.sqrt((Math.pow(maxVel,2))/2) ;
+            //System.out.println(maxVel);
+            //System.out.println((float) Math.sqrt((Math.pow(maxVel*PPM,2))/2));
+            body.applyForceToCenter( v.x >=0 ? (v.x < maxVel ? vX : 0) : (v.x > -maxVel ? vX : 0) , v.y >=0 ? (v.y < maxVel ? vY : 0) : (v.y > -maxVel? vY : 0),true);
+            //System.out.println(Math.sqrt(Math.pow(v.x,2) + Math.pow(v.y,2)));
+
+
+
+        }
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        SpriteBatch batch = gs.getBatch();
+        batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
+        batch.begin();
+        //batch.draw(getTexture(), body.getPosition().x, body.getPosition().y, 1, 1 );
+
+        batch.end();
     }
 }

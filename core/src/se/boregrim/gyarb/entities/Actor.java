@@ -21,14 +21,14 @@ import static se.boregrim.gyarb.utils.Constants.PPM;
 public class Actor extends Sprite implements Entity {
     GameScreen gs;
     World world;
-
+    SpriteBatch batch;
     boolean hasBody;
     public Body body;
     public Actor(GameScreen gs) {
         super();
         this.gs = gs;
         world = gs.getWorld();
-
+        batch = new SpriteBatch();
         hasBody = false;
         //this.body = body;
         //body = gs.createEBody(0, x,y,CAT_ENEMY, CAT_EDGE);
@@ -106,30 +106,43 @@ public class Actor extends Sprite implements Entity {
     }
     //Set Sprite texture and size
     public void setSprite(String name, int  height, int  width){
-        setTexture((Texture) gs.getGame().getAssets().getAssetManager().get(name));
-        setBounds(body.getPosition().x, body.getPosition().y,height*PPM,width*PPM);
-        System.out.println("Japp");
+        setTexture(gs.getGame().getAssets().getAssetManager().get(name, Texture.class));
+        setBounds(body.getPosition().x, body.getPosition().y,height/PPM,width/PPM);
+        setSize(width/PPM,height/PPM);
     }
     @Override
     public void update(float delta) {
-        if(hasBody && body !=null) {
-            setCenter(body.getPosition().x , body.getPosition().y);
+        //if(hasBody && body !=null) {
+            setCenter(body.getPosition().x, body.getPosition().y);
 
-        }
-        setCenter(0,0);
-        setOrigin(getWidth()/2,getHeight()/2);
-        Vector3 v = gs.getViewport().getCamera().position;
-        v.set(getX()- v.x,getY()-v.y,v.z);
+        //}
+        //setCenter(0,0);
+        //setOrigin(getWidth()/2,getHeight()/2);
+        //Vector3 v = gs.getViewport().getCamera().position;
+        //v.set(getX()- v.x,getY()-v.y,v.z);
     }
+
+    @Override
+    public void input(boolean paused) {
+
+    }
+
 
     @Override
     public void render(float delta) {
         if(getTexture() != null) {
-            SpriteBatch batch = gs.getBatch();
-            batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
             batch.begin();
+            batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
             draw(batch);
+            //batch.draw(getTexture(), body.getPosition().x - getWidth(), body.getPosition().y - getHeight(), getWidth(), getHeight());
+
             batch.end();
         }
+    }
+
+    @Override
+    public void die() {
+        world.destroyBody(body);
+        gs.removeEntity(this);
     }
 }

@@ -37,7 +37,6 @@ public class    GraphGenerator {
                 TiledMapTileLayer.Cell right = tiles.getCell(x+1, y);
                 TiledMapTileLayer.Cell down = tiles.getCell(x, y-1);
 
-                //Needs implimentation
                 TiledMapTileLayer.Cell upRight = tiles.getCell(x+1, y+1);
                 TiledMapTileLayer.Cell upLeft = tiles.getCell(x+1, y-1);
                 TiledMapTileLayer.Cell downRight = tiles.getCell(x-1, y+1);

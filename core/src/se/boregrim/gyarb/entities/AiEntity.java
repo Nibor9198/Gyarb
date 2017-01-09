@@ -23,6 +23,7 @@ import se.boregrim.gyarb.managers.MapManager;
 import se.boregrim.gyarb.pathfinding.HeuristicImp;
 import se.boregrim.gyarb.pathfinding.Node;
 import se.boregrim.gyarb.pathfinding.Path;
+import se.boregrim.gyarb.pathfinding.PathSteering;
 import se.boregrim.gyarb.screens.GameScreen;
 import se.boregrim.gyarb.utils.Constants;
 import se.boregrim.gyarb.utils.SteeringUtils;
@@ -70,28 +71,42 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
 
     }
     public void defaultSteering(){
+        pathfindInit();
+
         Arrive<Vector2> arrive = new Arrive<Vector2>(this, target)
                 .setTimeToTarget(0.01f)
                 .setArrivalTolerance(2f)
                 .setDecelerationRadius(15);
 
+
+        PathSteering pathArrive = new PathSteering(this, target);
+        pathArrive
+                .setTimeToTarget(0.01f)
+                .setArrivalTolerance(0f)
+                .setDecelerationRadius(15);
         //Seek<Vector2> seek = new Seek<Vector2>(this ,player);
 
 
 
-        setBehavior(arrive);
-        PathfindInit();
+        setBehavior(pathArrive);
+
     }
 
-    private void PathfindInit(){
+    private void pathfindInit(){
 
-        stateMachine = new DefaultStateMachine();
+        //stateMachine = new DefaultStateMachine();
         pathFinder = new IndexedAStarPathFinder(MapManager.graph,false);
 
-        int startX = (int) getPosition().x;
-        int startY = (int) getPosition().y;
+        pathfind();
 
-        int endX = (int) target.getPosition().x;
+    }
+
+    private Path pathfind(){
+        int startX;
+        System.out.println(startX = (int) getPosition().x);
+        int startY = (int) getPosition().y;
+        int endX;
+        System.out.println(endX = (int) target.getPosition().x);
         int endY = (int) target.getPosition().y;
 
         Node startNode = MapManager.graph.getNodeByPos(startX, startY);
@@ -99,28 +114,19 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
         outpath = new Path();
         pathFinder.searchNodePath(startNode,endNode, new HeuristicImp(), outpath);
         System.out.println(outpath.getCount());
-
+        return outpath;
     }
+
 
     @Override
     public void update(float delta){
     super.update(delta);
-        if (behavior != null){
+        if (behavior != null && steeringOutput != null){
             behavior.calculateSteering(steeringOutput);
             applySteering(delta);
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.L)){
-            int startX = (int) getPosition().x;
-            int startY = (int) getPosition().y;
-
-            int endX = (int) target.getPosition().x;
-            int endY = (int) target.getPosition().y;
-
-            Node startNode = MapManager.graph.getNodeByPos(startX, startY);
-            Node endNode = MapManager.graph.getNodeByPos(endX, endY);
-            outpath = new Path();
-            pathFinder.searchNodePath(startNode,endNode, new HeuristicImp(), outpath);
-            System.out.println(outpath.getCount());
+            pathfind();
         }
     }
 
@@ -154,6 +160,11 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
                 body.setLinearVelocity(velocity.scl(maxLinearSpeed/(float) (Math.sqrt(currentSpeedSquare))));
             }
         }
+    }
+
+    public Path getOutpath() {
+        pathfind();
+        return outpath;
     }
 
     @Override

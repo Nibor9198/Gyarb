@@ -1,6 +1,7 @@
 package se.boregrim.gyarb.entities;
 
 import com.badlogic.gdx.physics.box2d.*;
+import se.boregrim.gyarb.screens.GameScreen;
 
 import static se.boregrim.gyarb.utils.Constants.PPM;
 
@@ -9,8 +10,11 @@ import static se.boregrim.gyarb.utils.Constants.PPM;
  */
 public class Box implements Entity {
     Body body;
+    World world;
+    GameScreen gs;
 
-    public Box(World world, int x, int y){
+    public Box(GameScreen gs, int x, int y){
+        world = gs.getWorld();
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -42,7 +46,19 @@ public class Box implements Entity {
     }
 
     @Override
+    public void input(boolean paused) {
+
+    }
+
+
+    @Override
     public void render(float delta) {
 
+    }
+
+    @Override
+    public void die() {
+        world.destroyBody(body);
+        gs.removeEntity(this);
     }
 }

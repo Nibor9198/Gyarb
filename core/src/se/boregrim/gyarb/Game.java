@@ -1,30 +1,22 @@
 package se.boregrim.gyarb;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import se.boregrim.gyarb.managers.Assets;
 import se.boregrim.gyarb.screens.GameScreen;
 import se.boregrim.gyarb.screens.LoadingScreen;
 import se.boregrim.gyarb.screens.MainMenu;
 
-import java.io.File;
 import java.util.HashMap;
 
 public class Game extends com.badlogic.gdx.Game {
-	public SpriteBatch batch;
+	public SpriteBatch batch, menuBatch;
 	private HashMap<String, Screen> screens;
 	private Assets assets;
 	AssetManager manager;
@@ -38,6 +30,7 @@ public class Game extends com.badlogic.gdx.Game {
 	public void create () {
 		//Initiating variables
 		batch = new SpriteBatch();
+		menuBatch = new SpriteBatch();
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		//viewport = new ScreenViewport();
 		screens = new HashMap<String, Screen>();
@@ -86,5 +79,12 @@ public class Game extends com.badlogic.gdx.Game {
 
 	public Assets getAssets() {
 		return assets;
+	}
+
+	public SpriteBatch getBatch() {
+		return batch;
+	}
+	public SpriteBatch getMenuBatch(){
+		return menuBatch;
 	}
 }

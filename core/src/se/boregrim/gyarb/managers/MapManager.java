@@ -72,8 +72,6 @@ public class MapManager {
             body.createFixture(fdef);
 
             addNonWalkable(rect);
-
-
         }
         for (MapObject mapObject : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
