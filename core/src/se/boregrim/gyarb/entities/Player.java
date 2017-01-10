@@ -26,7 +26,8 @@ public class Player extends Actor implements Entity, Location<Vector2> {
     public Body body;
     private GameScreen gs;
     private AssetManager manager;
-    public Sprite legs;
+
+    private float health;
 
     public Player(GameScreen gs, int x, int y){
         super(gs);
@@ -65,6 +66,8 @@ public class Player extends Actor implements Entity, Location<Vector2> {
 
     @Override
     public void update(float delta) {
+
+        //if(body.getFixtureList().get(1).
         //Putting sprite ontop of the physical body
         //setCenter(body.getPosition().x,body.getPosition().y);
         //setOrigin(getWidth()/2,getHeight()/2);
@@ -141,6 +144,10 @@ public class Player extends Actor implements Entity, Location<Vector2> {
                //gs.getViewport().getCamera().position.y = gs.getViewport().getCamera().position.y - 2;
 //                gs.getViewport().getCamera().position.y = getY();
 //                gs.getViewport().getCamera().position.x = getX();
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)){
+                vX = vX * 10;
+                vY = vY * 10;
             }
             //Moving the player
             Vector2 v = body.getLinearVelocity();

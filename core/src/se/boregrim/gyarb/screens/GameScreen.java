@@ -153,6 +153,8 @@ public class GameScreen implements Screen {
     }
     @Override
     public void render(float delta) {
+        cam.setToOrtho(false,getViewport().getScreenWidth(),getViewport().getScreenHeight());
+
         handleInput(delta);
         if(!paused)
             update(delta);
@@ -197,6 +199,12 @@ public class GameScreen implements Screen {
                 player.body.setTransform(5/PPM, 5/PPM,player.body.getAngle());
             }if(Gdx.input.isKeyPressed(Input.Keys.P)){
                 player.body.setTransform(-5/PPM, -5/PPM,player.body.getAngle());
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.M)){
+                getViewport().setScreenSize(getViewport().getScreenWidth()/2,getViewport().getScreenHeight() /2);
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.MINUS)){
+                getViewport().setScreenSize(getViewport().getScreenWidth()*2,getViewport().getScreenHeight() *2);
             }
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.K)){

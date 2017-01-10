@@ -39,7 +39,7 @@ public class PathSteering extends Arrive {
 
     private boolean nextLocation() {
         if (nodes.size() > 0) {
-            current = nodes.get(0);
+            current = nodes.remove(0);
             if (nodes.size() > 0) {
                 return true;
             } else {
@@ -52,9 +52,9 @@ public class PathSteering extends Arrive {
     @Override
     protected SteeringAcceleration calculateRealSteering(SteeringAcceleration steering) {
         //System.out.println(owner.getPosition().dst(target.getPosition()));
-        if ((owner.getPosition().dst(target.getPosition()) < 2/PPM || true)) {
+        if ((owner.getPosition().dst(target.getPosition()) > 3)) {
             if ((System.currentTimeMillis() - timestamp) < 200) {
-                System.out.println(owner.getPosition().dst(current.getPosition()));
+                //System.out.println(owner.getPosition().dst(current.getPosition()));
                 if ((owner.getPosition().dst(current.getPosition()) > 1)) {
                     super.setTarget(current);
                     return super.calculateRealSteering(steering);

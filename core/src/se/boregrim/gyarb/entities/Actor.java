@@ -60,7 +60,7 @@ public class Actor extends Sprite implements Entity {
         fdef.filter.categoryBits = (short) catBits;
         fdef.filter.maskBits = (short) maskBits;
         fdef.filter.groupIndex = (short) groupIndex;
-        body.createFixture(fdef).setUserData("Player");
+        body.createFixture(fdef);
     }
     public void createCollisionSensor(float radius,float angle){
         //Creating Hit Sensor fixture
@@ -108,13 +108,15 @@ public class Actor extends Sprite implements Entity {
     public void setSprite(String name, int  height, int  width){
         setTexture(gs.getGame().getAssets().getAssetManager().get(name, Texture.class));
         setBounds(body.getPosition().x, body.getPosition().y,height/PPM,width/PPM);
+        System.out.println("Sprite");
+        System.out.println(body.getPosition().x + " " + body.getPosition().y+ " " + height/PPM+ " " + width/PPM);
         setSize(width/PPM,height/PPM);
     }
     @Override
     public void update(float delta) {
         //if(hasBody && body !=null) {
-            setCenter(body.getPosition().x, body.getPosition().y);
-
+            //setCenter(body.getPosition().x, body.getPosition().y);
+            setPosition(body.getPosition().x, body.getPosition().y);
         //}
         //setCenter(0,0);
         //setOrigin(getWidth()/2,getHeight()/2);
@@ -133,6 +135,7 @@ public class Actor extends Sprite implements Entity {
         if(getTexture() != null) {
             batch.begin();
             batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
+
             draw(batch);
             //batch.draw(getTexture(), body.getPosition().x - getWidth(), body.getPosition().y - getHeight(), getWidth(), getHeight());
 

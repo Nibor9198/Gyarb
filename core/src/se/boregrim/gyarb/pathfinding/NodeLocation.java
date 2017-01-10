@@ -6,13 +6,15 @@ import com.badlogic.gdx.math.Vector2;
 import se.boregrim.gyarb.managers.MapManager;
 import se.boregrim.gyarb.utils.SteeringUtils;
 
+import static se.boregrim.gyarb.utils.Constants.PPM;
+
 /**
  * Created by Robin on 2017-01-06.
  */
 public class NodeLocation implements com.badlogic.gdx.ai.utils.Location<Vector2> {
     Vector2 v;
     public NodeLocation(Node n){
-        v = new Vector2(n.getIndex()% MapManager.mapTileWidth,n.getIndex()/ MapManager.mapTileWidth );
+        v = new Vector2((n.getIndex()% MapManager.mapTileWidth) + 16/ PPM,(n.getIndex()/ MapManager.mapTileWidth)+ 16/PPM);
     }
     public void changeLocation(Node n){
         v = new Vector2(n.getIndex()% MapManager.mapTileWidth,n.getIndex()/ MapManager.mapTileWidth );

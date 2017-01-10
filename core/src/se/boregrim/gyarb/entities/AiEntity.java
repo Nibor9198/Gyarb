@@ -103,10 +103,10 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
 
     private Path pathfind(){
         int startX;
-        System.out.println(startX = (int) getPosition().x);
+        startX = (int) getPosition().x;
         int startY = (int) getPosition().y;
         int endX;
-        System.out.println(endX = (int) target.getPosition().x);
+        endX = (int) target.getPosition().x;
         int endY = (int) target.getPosition().y;
 
         Node startNode = MapManager.graph.getNodeByPos(startX, startY);
