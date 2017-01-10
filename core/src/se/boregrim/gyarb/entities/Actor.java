@@ -1,6 +1,7 @@
 package se.boregrim.gyarb.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,12 +24,14 @@ public class Actor extends Sprite implements Entity {
     World world;
     SpriteBatch batch;
     boolean hasBody;
+    AssetManager manager;
     public Body body;
     public Actor(GameScreen gs) {
         super();
         this.gs = gs;
         world = gs.getWorld();
-        batch = new SpriteBatch();
+        batch = gs.getBatch();
+        manager = gs.getGame().getAssets().getAssetManager();
         hasBody = false;
         //this.body = body;
         //body = gs.createEBody(0, x,y,CAT_ENEMY, CAT_EDGE);
@@ -106,11 +109,10 @@ public class Actor extends Sprite implements Entity {
     }
     //Set Sprite texture and size
     public void setSprite(String name, int  height, int  width){
-        setTexture(gs.getGame().getAssets().getAssetManager().get(name, Texture.class));
-        setBounds(body.getPosition().x, body.getPosition().y,height/PPM,width/PPM);
-        System.out.println("Sprite");
-        System.out.println(body.getPosition().x + " " + body.getPosition().y+ " " + height/PPM+ " " + width/PPM);
-        setSize(width/PPM,height/PPM);
+        setTexture(manager.get(name, Texture.class));
+        setBounds(body.getPosition().x, body.getPosition().y,height,width);
+
+        //System.out.println(body.getPosition().x + " " + body.getPosition().y+ " " + height/PPM+ " " + width/PPM);
     }
     @Override
     public void update(float delta) {

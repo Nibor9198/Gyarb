@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import se.boregrim.gyarb.Game;
 import se.boregrim.gyarb.Interfaces.Interactable;
+import se.boregrim.gyarb.Listeners.B2dContactListener;
 import se.boregrim.gyarb.entities.*;
 import se.boregrim.gyarb.managers.MapManager;
 import se.boregrim.gyarb.pathfinding.Node;
@@ -53,8 +54,10 @@ public class GameScreen implements Screen {
 
     //Box2d
     private World world;
+    private B2dContactListener contactListener;
     private Box2DDebugRenderer b2dr;
     private Player player;
+
 
     //Lighting
     private RayHandler rayHandler;
@@ -91,6 +94,7 @@ public class GameScreen implements Screen {
 
         //Box2d
         world = new World(new Vector2(),true);
+        world.setContactListener(contactListener = new B2dContactListener(this));
         b2dr = new Box2DDebugRenderer();
 
         //Load map
@@ -137,6 +141,7 @@ public class GameScreen implements Screen {
 
 
         world.step(delta, 6, 2);
+
 
         updateInteractables(delta);
             //Avkommentera!
