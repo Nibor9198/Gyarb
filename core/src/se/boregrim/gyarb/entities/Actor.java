@@ -110,15 +110,16 @@ public class Actor extends Sprite implements Entity {
     //Set Sprite texture and size
     public void setSprite(String name, int  height, int  width){
         setTexture(manager.get(name, Texture.class));
-        setBounds(body.getPosition().x, body.getPosition().y,height,width);
-
+        setBounds(body.getPosition().x, body.getPosition().y,height/PPM,width/PPM);
+        System.out.println("hej");
+        System.out.println(getVertices());
         //System.out.println(body.getPosition().x + " " + body.getPosition().y+ " " + height/PPM+ " " + width/PPM);
     }
     @Override
     public void update(float delta) {
         //if(hasBody && body !=null) {
-            //setCenter(body.getPosition().x, body.getPosition().y);
-            setPosition(body.getPosition().x, body.getPosition().y);
+            setCenter(body.getPosition().x, body.getPosition().y);
+            //setPosition(body.getPosition().x, body.getPosition().y);
         //}
         //setCenter(0,0);
         //setOrigin(getWidth()/2,getHeight()/2);
@@ -135,13 +136,15 @@ public class Actor extends Sprite implements Entity {
     @Override
     public void render(float delta) {
         if(getTexture() != null) {
+            //Gdx.gl.glActiveTexture(Gdx.gl20.GL_TEXTURE0);
             batch.begin();
             batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
-
             draw(batch);
+            batch.end();
+
             //batch.draw(getTexture(), body.getPosition().x - getWidth(), body.getPosition().y - getHeight(), getWidth(), getHeight());
 
-            batch.end();
+
         }
     }
 

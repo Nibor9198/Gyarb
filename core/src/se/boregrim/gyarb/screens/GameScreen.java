@@ -158,7 +158,7 @@ public class GameScreen implements Screen {
     }
     @Override
     public void render(float delta) {
-        cam.setToOrtho(false,getViewport().getScreenWidth(),getViewport().getScreenHeight());
+        //cam.setToOrtho(false,getViewport().getScreenWidth(),getViewport().getScreenHeight());
 
         handleInput(delta);
         if(!paused)
@@ -233,6 +233,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        ui.resize(width,height);
         vp.update(width, height);
     }
 

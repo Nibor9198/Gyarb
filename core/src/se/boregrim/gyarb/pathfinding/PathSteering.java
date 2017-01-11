@@ -1,12 +1,14 @@
 package se.boregrim.gyarb.pathfinding;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.btree.decorator.Random;
 import com.badlogic.gdx.ai.steer.Steerable;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.ai.steer.SteeringBehavior;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import se.boregrim.gyarb.entities.AiEntity;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class PathSteering extends Arrive {
     float timestamp;
     ArrayList<NodeLocation> nodes;
     Location target, current;
+
 
     public PathSteering(Steerable owner, Location target) {
         super(owner);
@@ -52,30 +55,28 @@ public class PathSteering extends Arrive {
     @Override
     protected SteeringAcceleration calculateRealSteering(SteeringAcceleration steering) {
         //System.out.println(owner.getPosition().dst(target.getPosition()));
-        if ((owner.getPosition().dst(target.getPosition()) > 3)) {
-            if ((System.currentTimeMillis() - timestamp) < 200) {
-                //System.out.println(owner.getPosition().dst(current.getPosition()));
-                if ((owner.getPosition().dst(current.getPosition()) > 1)) {
-                    super.setTarget(current);
-                    return super.calculateRealSteering(steering);
-                } else{
-                    if(!nextLocation()){
-                        nextPath();
+            if ((owner.getPosition().dst(target.getPosition()) > 3)) {
+                if ((System.currentTimeMillis() - timestamp) < 200) {
+                    //System.out.println(owner.getPosition().dst(current.getPosition()));
+                    if ((owner.getPosition().dst(current.getPosition()) > 1)) {
+                        super.setTarget(current);
+                        return super.calculateRealSteering(steering);
+                    } else {
+                        if (!nextLocation()) {
+                            nextPath();
+                        }
                     }
+
+                } else {
+                    timestamp = System.currentTimeMillis();
+                    nextPath();
                 }
-
             } else {
-                timestamp = System.currentTimeMillis();
-                nextPath();
+                super.setTarget(target);
+                return super.calculateRealSteering(steering);
             }
-        }else{
-            super.setTarget(target);
-            return super.calculateRealSteering(steering);
-        }
 
 
-
-
-    return null;
+        return null;
     }
 }

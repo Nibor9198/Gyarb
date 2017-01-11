@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import se.boregrim.gyarb.Game;
 import static se.boregrim.gyarb.utils.Constants.PPM;
@@ -21,6 +23,8 @@ public class GameUiScreen implements Screen {
     FitViewport vp;
     Game game;
     Label label;
+    ProgressBar health;
+
 
     public GameUiScreen(GameScreen gameScreen){
         gs = gameScreen;
@@ -30,9 +34,13 @@ public class GameUiScreen implements Screen {
         vp = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         stage = new Stage(vp);
         label = new Label("Tjenare", game.getSkin());
+        health = new ProgressBar(0,1000,1,false,game.getSkin());
+        health.setValue(1000);
+
+        Button b = new Button(game.getSkin());
 
         stage.addActor(label);
-        Button b = new Button(game.getSkin());
+        stage.addActor(health);
 
         //stage.addActor(b);
 
@@ -48,7 +56,8 @@ public class GameUiScreen implements Screen {
         float x = vp.getScreenX();
         float y = vp.getScreenY();
         label.setText(((GameScreen)game.getScreens().get("game")).getPlayer().getPosition().toString());
-        stage.getActors().get(0).setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f/PPM,50f/PPM);
+        label.setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f/PPM,50f/PPM);
+        health.setBounds(health.getWidth(),health.getHeight(), health.getWidth(),health.getHeight());
         //stage.getActors().get(1).setBounds(x-2f,y-2f,200,200);
         stage.act(delta);
         stage.draw();
@@ -60,6 +69,9 @@ public class GameUiScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+
+        vp.setWorldHeight(height);
+        vp.setWorldWidth(width);
         vp.update(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
     }
 
