@@ -52,12 +52,8 @@ public class GameUiScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        update(delta);
 
-        float x = vp.getScreenX();
-        float y = vp.getScreenY();
-        label.setText(((GameScreen)game.getScreens().get("game")).getPlayer().getPosition().toString());
-        label.setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f/PPM,50f/PPM);
-        health.setBounds(health.getWidth(),health.getHeight(), health.getWidth(),health.getHeight());
         //stage.getActors().get(1).setBounds(x-2f,y-2f,200,200);
         stage.act(delta);
         stage.draw();
@@ -65,6 +61,12 @@ public class GameUiScreen implements Screen {
     }
         public void update(float delta){
 
+            float x = vp.getScreenX();
+            float y = vp.getScreenY();
+
+            label.setText(((GameScreen)game.getScreens().get("game")).getPlayer().getPosition().toString() + gs.getPlayer().getHealth());
+            label.setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f/PPM,50f/PPM);
+            health.setBounds(health.getWidth(),health.getHeight(), health.getWidth(),health.getHeight());
     }
 
     @Override
