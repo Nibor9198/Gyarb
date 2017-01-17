@@ -50,6 +50,9 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
     IndexedAStarPathFinder pathFinder;
     Path outpath;
 
+    boolean attacking;
+    float damage, health, maxhealth, attackspeed, timestamp;
+
     public AiEntity(GameScreen gs, float boundingRadius, Player player) {
         super(gs);
 
@@ -66,9 +69,14 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
         tagged = false;
 
         steeringOutput = new SteeringAcceleration<Vector2>(new Vector2());
-        //body.setUserData(this);
 
 
+
+        damage = 10;
+        health = 100;
+        maxhealth = 100;
+        attackspeed = 10000;
+        timestamp = 0;
     }
     public void defaultSteering(){
         pathfindInit();
@@ -127,6 +135,11 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.L)){
             pathfind();
+        }
+        if(attacking && (System.currentTimeMillis() - timestamp) > attackspeed){
+            gs.getPlayer().damage(damage);
+            System.out.println("attack");
+            timestamp = System.currentTimeMillis();
         }
     }
 
@@ -282,5 +295,9 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
 
     public SteeringAcceleration<Vector2> getSteeringOutput() {
         return steeringOutput;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
     }
 }

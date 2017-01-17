@@ -27,6 +27,7 @@ public class Player extends Actor implements Entity, Location<Vector2> {
     private GameScreen gs;
     private AssetManager manager;
 
+
     private float health;
 
     public Player(GameScreen gs, int x, int y){
@@ -59,8 +60,8 @@ public class Player extends Actor implements Entity, Location<Vector2> {
         float angle =  -MathUtils.atan2(y,x);
         //Transforming the Body
         body.setTransform(body.getPosition().x,body.getPosition().y,angle);
-
         //setRotation((float) ((angle *360/(2*Math.PI))+90));
+
 
     }
 
@@ -69,8 +70,8 @@ public class Player extends Actor implements Entity, Location<Vector2> {
 
         //if(body.getFixtureList().get(1).
         //Putting sprite ontop of the physical body
-        //setCenter(body.getPosition().x,body.getPosition().y);
-        //setOrigin(getWidth()/2,getHeight()/2);
+        setCenter(body.getPosition().x,body.getPosition().y);
+        //getSprite().setOrigin(getSprite().getWidth()/2,getSprite()getHeight()/2);
         super.update(delta);
         //setBounds(0,0,32/PPM, 32/PPM);
         playerFacing(Gdx.input.getX(),Gdx.input.getY());
@@ -162,6 +163,7 @@ public class Player extends Actor implements Entity, Location<Vector2> {
         }
     }
 
+
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -171,5 +173,13 @@ public class Player extends Actor implements Entity, Location<Vector2> {
         //batch.draw(getTexture(), body.getPosition().x, body.getPosition().y, 1, 1 );
 
         batch.end();
+    }
+
+    public float getHealth() {
+        return health;
+    }
+
+    public void damage(float damage){
+        health = health - damage;
     }
 }

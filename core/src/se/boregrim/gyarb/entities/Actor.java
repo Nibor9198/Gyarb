@@ -35,7 +35,6 @@ public class Actor extends Sprite implements Entity {
         batch = gs.getBatch();
         manager = gs.getGame().getAssets().getAssetManager();
         hasBody = false;
-
         //this.body = body;
         //body = gs.createEBody(0, x,y,CAT_ENEMY, CAT_EDGE);
 
@@ -56,6 +55,7 @@ public class Actor extends Sprite implements Entity {
         body.setLinearDamping(lDamping);
         body.setAngularDamping(aDamping);
         hasBody = true;
+        body.setUserData(this);
     }
     public void createFixture(CircleShape shape, float radius, float density, int catBits, int maskBits, int groupIndex) {
         //Creating Player fixture
@@ -109,19 +109,22 @@ public class Actor extends Sprite implements Entity {
         body.setTransform(body.getPosition().x,body.getPosition().y,angle);
         //Rotating Sprite
         //setRotation((float) ((angle *360/(2*Math.PI))+90));
+
     }
     //Set Sprite texture and size
     public void setSprite(String name, int  height, int  width){
         setTexture(manager.get(name, Texture.class));
         setBounds(body.getPosition().x, body.getPosition().y,height/PPM,width/PPM);
         System.out.println("hej");
+
         //System.out.println(getVertices());
+
         //System.out.println(body.getPosition().x + " " + body.getPosition().y+ " " + height/PPM+ " " + width/PPM);
     }
     @Override
     public void update(float delta) {
         //if(hasBody && body !=null) {
-            setCenter(body.getPosition().x, body.getPosition().y);
+        setCenter(body.getPosition().x, body.getPosition().y);
             //setPosition(body.getPosition().x, body.getPosition().y);
         //}
         //setCenter(0,0);
@@ -151,7 +154,9 @@ public class Actor extends Sprite implements Entity {
 
         }
     }
+
     //public Sprite getSprite(){return sprite;}
+
 
     @Override
     public void die() {
