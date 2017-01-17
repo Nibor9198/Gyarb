@@ -26,13 +26,16 @@ public class Actor extends Sprite implements Entity {
     boolean hasBody;
     AssetManager manager;
     public Body body;
+
     public Actor(GameScreen gs) {
         super();
+
         this.gs = gs;
         world = gs.getWorld();
         batch = gs.getBatch();
         manager = gs.getGame().getAssets().getAssetManager();
         hasBody = false;
+
         //this.body = body;
         //body = gs.createEBody(0, x,y,CAT_ENEMY, CAT_EDGE);
 
@@ -105,14 +108,14 @@ public class Actor extends Sprite implements Entity {
         //Rotating the Body
         body.setTransform(body.getPosition().x,body.getPosition().y,angle);
         //Rotating Sprite
-        setRotation((float) ((angle *360/(2*Math.PI))+90));
+        //setRotation((float) ((angle *360/(2*Math.PI))+90));
     }
     //Set Sprite texture and size
     public void setSprite(String name, int  height, int  width){
         setTexture(manager.get(name, Texture.class));
         setBounds(body.getPosition().x, body.getPosition().y,height/PPM,width/PPM);
         System.out.println("hej");
-        System.out.println(getVertices());
+        //System.out.println(getVertices());
         //System.out.println(body.getPosition().x + " " + body.getPosition().y+ " " + height/PPM+ " " + width/PPM);
     }
     @Override
@@ -139,7 +142,8 @@ public class Actor extends Sprite implements Entity {
             //Gdx.gl.glActiveTexture(Gdx.gl20.GL_TEXTURE0);
             batch.begin();
             batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
-            draw(batch);
+            batch.draw(getTexture(), getX(),getY(), getWidth(),getHeight());
+
             batch.end();
 
             //batch.draw(getTexture(), body.getPosition().x - getWidth(), body.getPosition().y - getHeight(), getWidth(), getHeight());
@@ -147,6 +151,7 @@ public class Actor extends Sprite implements Entity {
 
         }
     }
+    //public Sprite getSprite(){return sprite;}
 
     @Override
     public void die() {

@@ -45,7 +45,7 @@ public class Player extends Actor implements Entity, Location<Vector2> {
         //basic(gs,x,y);
         body = super.body;
 
-        setSprite("title.png",32,32);
+        setSprite("Player.png",32,32);
         //define(x,y);
     }
 
@@ -60,7 +60,7 @@ public class Player extends Actor implements Entity, Location<Vector2> {
         //Transforming the Body
         body.setTransform(body.getPosition().x,body.getPosition().y,angle);
 
-        setRotation((float) ((angle *360/(2*Math.PI))+90));
+        //setRotation((float) ((angle *360/(2*Math.PI))+90));
 
     }
 

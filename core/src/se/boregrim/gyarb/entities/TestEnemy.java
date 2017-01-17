@@ -17,8 +17,9 @@ public class TestEnemy extends AiEntity{
         createFixture(new CircleShape(),12,10, Constants.CAT_ENEMY | Constants.CAT_ENTITY ,Constants.CAT_EDGE| Constants.CAT_LIGHT,1);
         createCollisionSensor(18, (float) (Math.PI/2));
 
-
+        setSprite("Enemy.png",28,28);
         defaultSteering();
+
     }
 
 }

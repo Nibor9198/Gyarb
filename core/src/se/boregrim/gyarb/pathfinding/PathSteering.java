@@ -19,21 +19,22 @@ import static se.boregrim.gyarb.utils.Constants.PPM;
  * Created by Robin on 2017-01-06.
  */
 public class PathSteering extends Arrive {
-    float timestamp;
+    long timestamp;
     ArrayList<NodeLocation> nodes;
     Location target, current;
+
 
 
     public PathSteering(Steerable owner, Location target) {
         super(owner);
         this.target = target;
-        timestamp = System.currentTimeMillis();
         nodes = new ArrayList<NodeLocation>();
-        nextPath();
+        timestamp = 0;
     }
 
     private void nextPath() {
         Path path = ((AiEntity) owner).getOutpath();
+        nodes.clear();
         for (Node node : path.nodes) {
             nodes.add(new NodeLocation(node));
         }
@@ -56,7 +57,8 @@ public class PathSteering extends Arrive {
     protected SteeringAcceleration calculateRealSteering(SteeringAcceleration steering) {
         //System.out.println(owner.getPosition().dst(target.getPosition()));
             if ((owner.getPosition().dst(target.getPosition()) > 3)) {
-                if ((System.currentTimeMillis() - timestamp) < 200) {
+                if (System.currentTimeMillis() - timestamp < 10000) {
+
                     //System.out.println(owner.getPosition().dst(current.getPosition()));
                     if ((owner.getPosition().dst(current.getPosition()) > 1)) {
                         super.setTarget(current);
@@ -69,6 +71,7 @@ public class PathSteering extends Arrive {
 
                 } else {
                     timestamp = System.currentTimeMillis();
+
                     nextPath();
                 }
             } else {
