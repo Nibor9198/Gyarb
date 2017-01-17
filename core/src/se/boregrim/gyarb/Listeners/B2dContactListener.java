@@ -25,11 +25,9 @@ public class B2dContactListener implements ContactListener {
 
     private void damagePlayer(Fixture enemy, boolean attacking){
         for (Entity e: gs.getEntities()) {
-            // Funkar inte
-            if(e instanceof  TestEnemy && enemy.getUserData() instanceof AiEntity) {
-                System.out.println("1");
-                if (((AiEntity) e).equals((AiEntity) enemy.getUserData())) {
-                    System.out.println("2");
+            if(e instanceof  TestEnemy ) {
+                if(((TestEnemy) e).getBody().getFixtureList().get(1).equals(enemy)) {
+                    System.out.println("1");
                     ((AiEntity) e).setAttacking(attacking);
                 }
             }

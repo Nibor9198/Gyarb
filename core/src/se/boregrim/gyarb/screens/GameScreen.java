@@ -146,7 +146,7 @@ public class GameScreen implements Screen {
         updateInteractables(delta);
             //Avkommentera!
         //cam.position.set(player.body.getPosition().x,player.body.getPosition().y,0);
-        cam.position.set(player.getSprite().getX(),player.getSprite().getY(),0);
+        cam.position.set(player.getX(),player.getY(),0);
 
 
         //cam.lookAt(player.body.getPosition().x,player.body.getPosition().y,0);

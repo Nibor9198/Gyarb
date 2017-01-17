@@ -34,8 +34,7 @@ public class GameUiScreen implements Screen {
         vp = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         stage = new Stage(vp);
         label = new Label("Tjenare", game.getSkin());
-        health = new ProgressBar(0,1000,1,false,game.getSkin());
-        health.setValue(1000);
+        health = new ProgressBar(0,100,1,false,game.getSkin());
 
         Button b = new Button(game.getSkin());
 
@@ -67,6 +66,7 @@ public class GameUiScreen implements Screen {
             label.setText(((GameScreen)game.getScreens().get("game")).getPlayer().getPosition().toString() + gs.getPlayer().getHealth());
             label.setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f/PPM,50f/PPM);
             health.setBounds(health.getWidth(),health.getHeight(), health.getWidth(),health.getHeight());
+            health.setValue(gs.getPlayer().getHealth());
     }
 
     @Override

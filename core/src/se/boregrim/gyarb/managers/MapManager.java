@@ -97,7 +97,7 @@ public class MapManager {
         for (int y = 0; y < Math.round(rect.getHeight()/PPM); y++) {
             for (int x = 0; x < Math.round(rect.getWidth()/PPM); x++) {
                 if(!(y < 2 && y > mapTileHeight-2 && x < 2 && x > mapTileWidth -2)) {
-                    System.out.println(x + rect.getX() + " " + y + rect.getY());
+                    //System.out.println(x + rect.getX() + " " + y + rect.getY());
                     nonWalkablePos.add(new Vector2(x + Math.round(rect.getX()/PPM), y +  Math.round(rect.getY()/PPM)));
                 }
             }

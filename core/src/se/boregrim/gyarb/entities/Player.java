@@ -35,6 +35,7 @@ public class Player extends Actor implements Entity, Location<Vector2> {
         this.gs = gs;
         world = gs.getWorld();
         manager = gs.getGame().getAssets().getAssetManager();
+        health = 100;
 
 
         createBody(x,y,3,0);
@@ -181,5 +182,6 @@ public class Player extends Actor implements Entity, Location<Vector2> {
 
     public void damage(float damage){
         health = health - damage;
+        System.out.println(health);
     }
 }

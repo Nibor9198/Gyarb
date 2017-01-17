@@ -51,7 +51,8 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
     Path outpath;
 
     boolean attacking;
-    float damage, health, maxhealth, attackspeed, timestamp;
+    float damage, health, maxhealth;
+    long attackspeed, timestamp;
 
     public AiEntity(GameScreen gs, float boundingRadius, Player player) {
         super(gs);
@@ -72,24 +73,24 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
 
 
 
-        damage = 10;
+        damage = 1;
         health = 100;
         maxhealth = 100;
-        attackspeed = 10000;
+        attackspeed = 2000;
         timestamp = 0;
     }
     public void defaultSteering(){
         pathfindInit();
 
         Arrive<Vector2> arrive = new Arrive<Vector2>(this, target)
-                .setTimeToTarget(0.01f)
+                .setTimeToTarget(0.1f)
                 .setArrivalTolerance(2f)
                 .setDecelerationRadius(15);
 
 
         PathSteering pathArrive = new PathSteering(this, target);
         pathArrive
-                .setTimeToTarget(0.01f)
+                .setTimeToTarget(0.001f)
                 .setArrivalTolerance(0f)
                 .setDecelerationRadius(15);
         //Seek<Vector2> seek = new Seek<Vector2>(this ,player);
@@ -121,7 +122,7 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
         Node endNode = MapManager.graph.getNodeByPos(endX, endY);
         outpath = new Path();
         pathFinder.searchNodePath(startNode,endNode, new HeuristicImp(), outpath);
-        System.out.println(outpath.getCount());
+        //System.out.println(outpath.getCount());
         return outpath;
     }
 
