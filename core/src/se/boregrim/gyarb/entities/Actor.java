@@ -160,6 +160,7 @@ public class Actor extends Sprite implements Entity {
 
     @Override
     public void die() {
+
         world.destroyBody(body);
         gs.removeEntity(this);
     }

@@ -22,6 +22,7 @@ public class PathSteering extends Arrive {
     long timestamp;
     ArrayList<NodeLocation> nodes;
     Location target, current;
+    boolean outOfBounds;
 
 
 
@@ -34,11 +35,16 @@ public class PathSteering extends Arrive {
 
     private void nextPath() {
         Path path = ((AiEntity) owner).getOutpath();
-        nodes.clear();
-        for (Node node : path.nodes) {
-            nodes.add(new NodeLocation(node));
+        if(path != null) {
+            nodes.clear();
+            for (Node node : path.nodes) {
+                nodes.add(new NodeLocation(node));
+            }
+            nextLocation();
+        }else{
+            nodes.clear();
+            outOfBounds = true;
         }
-        nextLocation();
     }
 
     private boolean nextLocation() {
@@ -59,8 +65,11 @@ public class PathSteering extends Arrive {
             if ((owner.getPosition().dst(target.getPosition()) > 3)) {
                 if (System.currentTimeMillis() - timestamp < 10000) {
 
-                    //System.out.println(owner.getPosition().dst(current.getPosition()));
-                    if ((owner.getPosition().dst(current.getPosition()) > 1)) {
+                    if(outOfBounds){
+                        //Vad som händer när En entity är utanför banan
+                        ((AiEntity)owner).die();
+
+                    }else if ((owner.getPosition().dst(current.getPosition()) > 1)) {
                         super.setTarget(current);
                         return super.calculateRealSteering(steering);
                     } else {
@@ -70,6 +79,7 @@ public class PathSteering extends Arrive {
                     }
 
                 } else {
+                    outOfBounds = false;
                     timestamp = System.currentTimeMillis();
 
                     nextPath();

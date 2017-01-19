@@ -27,7 +27,7 @@ public class B2dContactListener implements ContactListener {
         for (Entity e: gs.getEntities()) {
             if(e instanceof  TestEnemy ) {
                 if(((TestEnemy) e).getBody().getFixtureList().get(1).equals(enemy)) {
-                    System.out.println("1");
+                    //System.out.println("1");
                     ((AiEntity) e).setAttacking(attacking);
                 }
             }

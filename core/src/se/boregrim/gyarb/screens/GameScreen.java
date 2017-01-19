@@ -35,10 +35,14 @@ import static se.boregrim.gyarb.utils.Constants.*;
  */
 public class GameScreen implements Screen {
     private Game game;
-    private ArrayList<Entity> entities;
+
     private boolean paused;
 
     private ArrayList<Interactable> interactables;
+    private ArrayList<Interactable> interactablestoDelete;
+
+    private ArrayList<Entity> entities;
+    private ArrayList<Entity> entitiestoDelete;
 
     //Camera and Viewport
     private OrthographicCamera cam;
@@ -76,7 +80,11 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         entities = new ArrayList<Entity>();
+        entitiestoDelete = new ArrayList<Entity>();
+
         interactables = new ArrayList<Interactable>();
+        interactablestoDelete = new ArrayList<Interactable>();
+
         paused = false;
         debugged = false;
 
@@ -99,7 +107,7 @@ public class GameScreen implements Screen {
 
         //Load map
         MapManager mapManager = new MapManager();
-        mapManager.loadMap("Maps/TestMap2.tmx", world);
+        mapManager.loadMap("Maps/TestMap3.tmx", world);
         otmr = mapManager.otmr;
 
 
@@ -154,7 +162,8 @@ public class GameScreen implements Screen {
         cam.update();
         otmr.setView(cam);
 
-
+        deleteEntities();
+        deleteInteractables();
     }
     @Override
     public void render(float delta) {
@@ -264,8 +273,7 @@ public class GameScreen implements Screen {
         addInteractable(e);
     }
     public void removeEntity(Entity e){
-        entities.remove(e);
-        removeInteractable(e);
+        entitiestoDelete.add(e);
     }
     public ArrayList<Entity> getEntities(){
         return entities;
@@ -274,7 +282,8 @@ public class GameScreen implements Screen {
         interactables.add(i);
     }
     public void removeInteractable(Interactable i){
-        interactables.remove(i);
+
+        interactablestoDelete.add(i);
     }
 
     public void updateInteractables(float delta){
@@ -316,6 +325,21 @@ public class GameScreen implements Screen {
         }else{
             removeInteractable(pathfindDebugrenderer);
         }
+    }
+
+    private void deleteEntities(){
+        for (Entity e: entitiestoDelete) {
+            entities.remove(e);
+            interactables.remove(e);
+        }
+        entitiestoDelete.clear();
+    }
+    private void deleteInteractables(){
+        for (Interactable i: interactablestoDelete) {
+            interactables.remove(i);
+        }
+        interactablestoDelete.clear();
+
     }
 
 }
