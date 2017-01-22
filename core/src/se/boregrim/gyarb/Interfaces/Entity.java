@@ -1,4 +1,4 @@
-package se.boregrim.gyarb.entities;
+package se.boregrim.gyarb.Interfaces;
 
 import se.boregrim.gyarb.Interfaces.Interactable;
 

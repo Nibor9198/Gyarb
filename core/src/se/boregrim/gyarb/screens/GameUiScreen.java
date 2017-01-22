@@ -34,7 +34,7 @@ public class GameUiScreen implements Screen {
         vp = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         stage = new Stage(vp);
         label = new Label("Tjenare", game.getSkin());
-        health = new ProgressBar(0,100,1,false,game.getSkin());
+        health = new ProgressBar(0,100,1,false, game.getSkin());
 
         Button b = new Button(game.getSkin());
 

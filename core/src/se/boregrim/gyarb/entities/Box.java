@@ -1,6 +1,7 @@
 package se.boregrim.gyarb.entities;
 
 import com.badlogic.gdx.physics.box2d.*;
+import se.boregrim.gyarb.Interfaces.Entity;
 import se.boregrim.gyarb.screens.GameScreen;
 
 import static se.boregrim.gyarb.utils.Constants.PPM;

@@ -1,19 +1,15 @@
 package se.boregrim.gyarb.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import se.boregrim.gyarb.Interfaces.Entity;
 import se.boregrim.gyarb.screens.GameScreen;
-import se.boregrim.gyarb.utils.Constants;
 
-import static se.boregrim.gyarb.utils.Constants.CAT_EDGE;
-import static se.boregrim.gyarb.utils.Constants.CAT_ENEMY;
 import static se.boregrim.gyarb.utils.Constants.PPM;
 
 /**
@@ -27,6 +23,10 @@ public class Actor extends Sprite implements Entity {
     AssetManager manager;
     public Body body;
 
+
+    float health, maxHealth;
+
+
     public Actor(GameScreen gs) {
         super();
 
@@ -35,6 +35,9 @@ public class Actor extends Sprite implements Entity {
         batch = gs.getBatch();
         manager = gs.getGame().getAssets().getAssetManager();
         hasBody = false;
+        health = 100;
+
+        gs.addEntity(this);
         //this.body = body;
         //body = gs.createEBody(0, x,y,CAT_ENEMY, CAT_EDGE);
 
@@ -43,7 +46,7 @@ public class Actor extends Sprite implements Entity {
         //createCollisionSensor((float) (Math.PI /2));
 
     }
-    public void createBody(int x, int y, float lDamping, float aDamping) {
+    public void createBody(float x, float y, float lDamping, float aDamping) {
         //Creating player body
 
         BodyDef bdef = new BodyDef();
@@ -131,6 +134,9 @@ public class Actor extends Sprite implements Entity {
         //setOrigin(getWidth()/2,getHeight()/2);
         //Vector3 v = gs.getViewport().getCamera().position;
         //v.set(getX()- v.x,getY()-v.y,v.z);
+        if(health <= 0){
+            die();
+        }
     }
 
     @Override
@@ -157,10 +163,24 @@ public class Actor extends Sprite implements Entity {
 
     //public Sprite getSprite(){return sprite;}
 
+    public float getHealth() {
+        return health;
+    }
+    public void damage(float damage){
+        health = health - damage;
+        System.out.println(health);
+    }
+
+    public void setHealth(float health) {
+        this.health = health;
+        if (health > maxHealth){
+            maxHealth = health;
+        }
+
+    }
 
     @Override
     public void die() {
-
         world.destroyBody(body);
         gs.removeEntity(this);
     }

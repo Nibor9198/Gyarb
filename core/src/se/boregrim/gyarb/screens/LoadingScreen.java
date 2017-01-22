@@ -2,17 +2,10 @@ package se.boregrim.gyarb.screens;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import se.boregrim.gyarb.Game;
-import se.boregrim.gyarb.entities.Entity;
-
-import java.util.ArrayList;
 
 /**
  * Created by robin.boregrim on 2016-10-24.

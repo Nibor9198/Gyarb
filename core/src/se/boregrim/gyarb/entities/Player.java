@@ -4,14 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.utils.Location;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import se.boregrim.gyarb.Interfaces.Entity;
 import se.boregrim.gyarb.screens.GameScreen;
 import se.boregrim.gyarb.utils.Constants;
 import se.boregrim.gyarb.utils.SteeringUtils;
@@ -23,19 +21,19 @@ import static se.boregrim.gyarb.utils.Constants.PPM;
  */
 public class Player extends Actor implements Entity, Location<Vector2> {
     public World world;
-    public Body body;
+
     private GameScreen gs;
-    private AssetManager manager;
 
-
-    private float health;
+    private float angle;
 
     public Player(GameScreen gs, int x, int y){
+
         super(gs);
         this.gs = gs;
         world = gs.getWorld();
         manager = gs.getGame().getAssets().getAssetManager();
-        health = 100;
+        angle = 0;
+        setHealth(200);
 
 
         createBody(x,y,3,0);
@@ -58,7 +56,7 @@ public class Player extends Actor implements Entity, Location<Vector2> {
         x = x- Gdx.graphics.getWidth()/2;
         y = y- Gdx.graphics.getHeight()/2;
         //Calculating the angle
-        float angle =  -MathUtils.atan2(y,x);
+        angle =  -MathUtils.atan2(y,x);
         //Transforming the Body
         body.setTransform(body.getPosition().x,body.getPosition().y,angle);
         //setRotation((float) ((angle *360/(2*Math.PI))+90));
@@ -127,6 +125,8 @@ public class Player extends Actor implements Entity, Location<Vector2> {
 
         // Player Controls
         if(!paused) {
+
+         //Movement
             Vector3 pos = gs.getViewport().getCamera().position;
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)/*&& player.body.getLinearVelocity().x <= 2f */) {
                 vX += speed;
@@ -154,11 +154,12 @@ public class Player extends Actor implements Entity, Location<Vector2> {
             //Moving the player
             Vector2 v = body.getLinearVelocity();
             maxVel = vX == 0 || vY == 0 ? maxVel: (float) Math.sqrt((Math.pow(maxVel,2))/2) ;
-            //System.out.println(maxVel);
-            //System.out.println((float) Math.sqrt((Math.pow(maxVel*PPM,2))/2));
             body.applyForceToCenter( v.x >=0 ? (v.x < maxVel ? vX : 0) : (v.x > -maxVel ? vX : 0) , v.y >=0 ? (v.y < maxVel ? vY : 0) : (v.y > -maxVel? vY : 0),true);
-            //System.out.println(Math.sqrt(Math.pow(v.x,2) + Math.pow(v.y,2)));
 
+        //Others
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+                shoot();
+            }
 
 
         }
@@ -176,12 +177,18 @@ public class Player extends Actor implements Entity, Location<Vector2> {
         batch.end();
     }
 
-    public float getHealth() {
-        return health;
+
+    public void shoot(){
+        Vector2 force = new Vector2();
+        angleToVector(force, (float) (angle - Math.PI/2));
+        //System.out.println("Angle: x: " + force.x + " y: " + force.y);
+
+        force.x = force.x * 1000;
+        force.y = force.y * 1000;
+        Shot s = new Shot(gs, body.getPosition(),force,true);
     }
 
-    public void damage(float damage){
-        health = health - damage;
-        System.out.println(health);
-    }
+
+
+
 }

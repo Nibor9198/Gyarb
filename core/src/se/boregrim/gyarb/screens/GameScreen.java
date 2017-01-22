@@ -5,7 +5,6 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.graphics.*;
 
 import com.badlogic.gdx.graphics.Color;
@@ -13,15 +12,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import se.boregrim.gyarb.Game;
+import se.boregrim.gyarb.Interfaces.Entity;
 import se.boregrim.gyarb.Interfaces.Interactable;
 import se.boregrim.gyarb.Listeners.B2dContactListener;
 import se.boregrim.gyarb.entities.*;
 import se.boregrim.gyarb.managers.MapManager;
-import se.boregrim.gyarb.pathfinding.Node;
 import se.boregrim.gyarb.pathfinding.PathfindDebugrenderer;
 import se.boregrim.gyarb.utils.Constants;
 
@@ -40,6 +37,7 @@ public class GameScreen implements Screen {
 
     private ArrayList<Interactable> interactables;
     private ArrayList<Interactable> interactablestoDelete;
+    private ArrayList<Interactable> interactablestoAdd;
 
     private ArrayList<Entity> entities;
     private ArrayList<Entity> entitiestoDelete;
@@ -84,7 +82,7 @@ public class GameScreen implements Screen {
 
         interactables = new ArrayList<Interactable>();
         interactablestoDelete = new ArrayList<Interactable>();
-
+        interactablestoAdd = new ArrayList<Interactable>();
         paused = false;
         debugged = false;
 
@@ -113,7 +111,7 @@ public class GameScreen implements Screen {
 
         //Add Player
         player = new Player(this, (int)vp.getWorldWidth()/2,(int)vp.getWorldHeight()/2);
-        addEntity(player);
+
 
         //Pathfinddebugger
         pathfindDebugrenderer = new PathfindDebugrenderer(this);
@@ -162,6 +160,7 @@ public class GameScreen implements Screen {
         cam.update();
         otmr.setView(cam);
 
+        addInteractables();
         deleteEntities();
         deleteInteractables();
     }
@@ -204,7 +203,7 @@ public class GameScreen implements Screen {
         if(!paused){
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                createBox((int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM));
+                //createBox((int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM));
             }
             if(Gdx.input.isKeyJustPressed(Input.Keys.O)){
                 toggleDebugged();
@@ -223,7 +222,7 @@ public class GameScreen implements Screen {
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
                 AiEntity e;
-                addEntity(e = new TestEnemy(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM), 25, player));
+                e = new TestEnemy(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM), 25, player);
             }
         }
 
@@ -279,7 +278,7 @@ public class GameScreen implements Screen {
         return entities;
     }
     public void addInteractable(Interactable i){
-        interactables.add(i);
+        interactablestoAdd.add(i);
     }
     public void removeInteractable(Interactable i){
 
@@ -340,6 +339,12 @@ public class GameScreen implements Screen {
         }
         interactablestoDelete.clear();
 
+    }
+    private void addInteractables(){
+        for (Interactable i: interactablestoAdd) {
+            interactables.add(i);
+        }
+        interactablestoAdd.clear();
     }
 
 }
