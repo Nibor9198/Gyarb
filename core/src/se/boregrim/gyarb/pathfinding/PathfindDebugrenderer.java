@@ -93,4 +93,14 @@ public class PathfindDebugrenderer implements Interactable {
             NodePos.x++;
         }
     }
+
+    @Override
+    public void dispose() {
+
+    }
+
+    @Override
+    public boolean isDead() {
+        return false;
+    }
 }

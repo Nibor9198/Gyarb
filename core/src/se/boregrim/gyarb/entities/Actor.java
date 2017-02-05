@@ -22,6 +22,7 @@ public class Actor extends Sprite implements Entity {
     boolean hasBody;
     AssetManager manager;
     public Body body;
+    boolean dead;
 
 
     float health, maxHealth;
@@ -144,6 +145,11 @@ public class Actor extends Sprite implements Entity {
 
     }
 
+    @Override
+    public void dispose() {
+
+    }
+
 
     @Override
     public void render(float delta) {
@@ -176,12 +182,22 @@ public class Actor extends Sprite implements Entity {
         if (health > maxHealth){
             maxHealth = health;
         }
-
     }
 
     @Override
     public void die() {
-        world.destroyBody(body);
+        dead = true;
         gs.removeEntity(this);
+        for (Fixture f:body.getFixtureList()) {
+            body.destroyFixture(f);
+        }
+        world.destroyBody(body);
+
+
+    }
+
+    @Override
+    public boolean isDead() {
+        return dead;
     }
 }

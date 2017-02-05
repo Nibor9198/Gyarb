@@ -51,7 +51,7 @@ public class GameScreen implements Screen {
 
 
     //Map rendering
-    private MapManager mapManager;
+
     private OrthogonalTiledMapRenderer otmr;
 
     //Box2d
@@ -222,7 +222,8 @@ public class GameScreen implements Screen {
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
                 AiEntity e;
-                e = new TestEnemy(this, (int) (player.body.getPosition().x * PPM), (int) (player.body.getPosition().y * PPM), 25, player);
+                Vector2 pos = MapManager.enemySpawn();
+                e = new TestEnemy(this, (int) (pos.x * PPM), (int) (pos.y * PPM), 25, player);
             }
         }
 
@@ -263,9 +264,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         rayHandler.dispose();
-        mapManager.dispose();
-
-
+        //MapManager.dispose();
     }
     public void addEntity(Entity e){
         entities.add(e);
@@ -292,7 +291,8 @@ public class GameScreen implements Screen {
     }
     public void renderInteractables(float delta){
         for (Interactable i:interactables) {
-            i.render(delta);
+            if (!i.isDead())
+                i.render(delta);
         }
     }
     public void createBox(int x, int y){
@@ -330,12 +330,14 @@ public class GameScreen implements Screen {
         for (Entity e: entitiestoDelete) {
             entities.remove(e);
             interactables.remove(e);
+            e.dispose();
         }
         entitiestoDelete.clear();
     }
     private void deleteInteractables(){
         for (Interactable i: interactablestoDelete) {
             interactables.remove(i);
+            i.dispose();
         }
         interactablestoDelete.clear();
 

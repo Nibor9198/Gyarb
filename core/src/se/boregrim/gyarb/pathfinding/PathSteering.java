@@ -66,7 +66,7 @@ public class PathSteering extends Arrive {
                 if (System.currentTimeMillis() - timestamp < 10000) {
 
                     if(outOfBounds){
-                        //Vad som händer när En entity är utanför banan
+                        //Vad som händer när en entity är utanför banan
                         ((AiEntity)owner).die();
 
                     }else if ((owner.getPosition().dst(current.getPosition()) > 1)) {

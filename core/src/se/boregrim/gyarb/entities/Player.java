@@ -157,7 +157,7 @@ public class Player extends Actor implements Entity, Location<Vector2> {
             body.applyForceToCenter( v.x >=0 ? (v.x < maxVel ? vX : 0) : (v.x > -maxVel ? vX : 0) , v.y >=0 ? (v.y < maxVel ? vY : 0) : (v.y > -maxVel? vY : 0),true);
 
         //Others
-            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
                 shoot();
             }
 
@@ -183,8 +183,8 @@ public class Player extends Actor implements Entity, Location<Vector2> {
         angleToVector(force, (float) (angle - Math.PI/2));
         //System.out.println("Angle: x: " + force.x + " y: " + force.y);
 
-        force.x = force.x * 1000;
-        force.y = force.y * 1000;
+        force.x = force.x * 3000;
+        force.y = force.y * 3000;
         Shot s = new Shot(gs, body.getPosition(),force,true);
     }
 

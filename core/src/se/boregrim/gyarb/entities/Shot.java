@@ -29,7 +29,7 @@ public class Shot extends Actor {
 
         }
         createBody(x, y, 0, 0);
-        createFixture(new CircleShape(), 2, 200, Constants.CAT_SHOT | Constants.CAT_ENTITY ,Constants.CAT_WALL | Constants.CAT_ENTITY
+        createFixture(new CircleShape(), 3, 100, Constants.CAT_SHOT | Constants.CAT_ENTITY ,Constants.CAT_WALL | Constants.CAT_ENTITY
         , 0);
         body.getFixtureList().get(0).setRestitution(0.2f);
 
@@ -50,8 +50,8 @@ public class Shot extends Actor {
             for (Entity e: gs.getEntities()) {
                 if (e instanceof AiEntity) {
                     if (target.equals(((AiEntity) e).getBody().getFixtureList().first())) {
-                        System.out.println("Damage");
-                        ((AiEntity) e).damage(1);
+                        ((AiEntity) e).damage(50);
+                        // die();
                         break;
                     }
                 }

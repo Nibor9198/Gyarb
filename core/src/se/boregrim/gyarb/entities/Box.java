@@ -51,6 +51,16 @@ public class Box implements Entity {
 
     }
 
+    @Override
+    public void dispose() {
+
+    }
+
+    @Override
+    public boolean isDead() {
+        return false;
+    }
+
 
     @Override
     public void render(float delta) {
