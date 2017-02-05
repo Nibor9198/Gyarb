@@ -23,7 +23,8 @@ public class LoadingScreen implements Screen {
     public LoadingScreen(Game game){
         this.game = game;
 
-        //Making a refrence to the assetmanager (is used as input for progressbar)
+        //Making a refrence to the assetmanager
+        //(is used as input for the progressbar)
         manager = game.getAssets().getAssetManager();
 
         // Creating the stage
@@ -42,7 +43,7 @@ public class LoadingScreen implements Screen {
         pb = new ProgressBar(0f,1f,0.1f,false,skin);
         pb.setBounds(stage.getWidth() * 0.5f - 100f, stage.getHeight() * 0.5f,200,50);
 
-        //Adding it to the stage
+        //Adding the progress bar to the stage
         stage.addActor(pb);
 
 
@@ -51,16 +52,18 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        // If all the assets are loaded, set screen to main
+        // If all the assets are loaded: set screen to the MainMenu and dispose of the stage
         if (manager.update()) {
             game.setScreen(game.getScreens().get("main"));
-        }
-        //Update the Progressbar
-        pb.setValue(manager.getProgress());
+            dispose();
+        }else {
+            //Update the Progressbar
+            pb.setValue(manager.getProgress());
 
-        //Draw the stage
-        stage.act();
-        stage.draw();
+            //Draw the stage
+            stage.act();
+            stage.draw();
+        }
 
     }
 
@@ -87,6 +90,7 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void dispose() {
+        stage.dispose();
 
     }
 }
