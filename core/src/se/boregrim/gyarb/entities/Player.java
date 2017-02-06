@@ -183,8 +183,8 @@ public class Player extends Actor implements Entity, Location<Vector2> {
         angleToVector(force, (float) (angle - Math.PI/2));
         //System.out.println("Angle: x: " + force.x + " y: " + force.y);
 
-        force.x = force.x * 3000;
-        force.y = force.y * 3000;
+        force.x = force.x * 4000;
+        force.y = force.y * 4000;
         Shot s = new Shot(gs, body.getPosition(),force,true);
     }
 

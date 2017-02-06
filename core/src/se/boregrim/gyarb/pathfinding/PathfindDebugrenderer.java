@@ -94,10 +94,6 @@ public class PathfindDebugrenderer implements Interactable {
         }
     }
 
-    @Override
-    public void dispose() {
-
-    }
 
     @Override
     public boolean isDead() {

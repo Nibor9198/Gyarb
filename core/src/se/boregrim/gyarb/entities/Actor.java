@@ -24,8 +24,8 @@ public class Actor extends Sprite implements Entity {
     public Body body;
     boolean dead;
 
-
-    float health, maxHealth;
+    long regenTimestamp;
+    float health, maxHealth,regenCooldown;
 
 
     public Actor(GameScreen gs) {
@@ -38,6 +38,8 @@ public class Actor extends Sprite implements Entity {
         hasBody = false;
         health = 100;
 
+        regenTimestamp = 0;
+        regenCooldown = 1000;
         gs.addEntity(this);
         //this.body = body;
         //body = gs.createEBody(0, x,y,CAT_ENEMY, CAT_EDGE);
@@ -119,7 +121,6 @@ public class Actor extends Sprite implements Entity {
     public void setSprite(String name, int  height, int  width){
         setTexture(manager.get(name, Texture.class));
         setBounds(body.getPosition().x, body.getPosition().y,height/PPM,width/PPM);
-        System.out.println("hej");
 
         //System.out.println(getVertices());
 
@@ -135,8 +136,15 @@ public class Actor extends Sprite implements Entity {
         //setOrigin(getWidth()/2,getHeight()/2);
         //Vector3 v = gs.getViewport().getCamera().position;
         //v.set(getX()- v.x,getY()-v.y,v.z);
+
         if(health <= 0){
             die();
+        }
+        if(health < maxHealth && (System.currentTimeMillis() - regenTimestamp) > regenCooldown){
+            health+=(maxHealth-health)* 0.01;
+            regenCooldown = 1000;
+            regenTimestamp = System.currentTimeMillis();
+            System.out.println("heal: " + (maxHealth-health)* 0.1 );
         }
     }
 
@@ -144,12 +152,6 @@ public class Actor extends Sprite implements Entity {
     public void input(boolean paused) {
 
     }
-
-    @Override
-    public void dispose() {
-
-    }
-
 
     @Override
     public void render(float delta) {
@@ -173,8 +175,9 @@ public class Actor extends Sprite implements Entity {
         return health;
     }
     public void damage(float damage){
+        regenTimestamp = System.currentTimeMillis();
+        regenCooldown = 3000;
         health = health - damage;
-        System.out.println(health);
     }
 
     public void setHealth(float health) {
@@ -188,13 +191,18 @@ public class Actor extends Sprite implements Entity {
     public void die() {
         dead = true;
         gs.removeEntity(this);
-        for (Fixture f:body.getFixtureList()) {
-            body.destroyFixture(f);
-        }
-        world.destroyBody(body);
-
-
+        //
+        //world.destroyBody(body);
     }
+
+    @Override
+    public void destroyBody() {
+        for (Fixture f : body.getFixtureList()) {
+               body.destroyFixture(f);
+            }
+        world.destroyBody(body);
+    }
+
 
     @Override
     public boolean isDead() {

@@ -11,26 +11,31 @@ public class Enemy extends AiEntity {
 
     float damage;
     boolean attacking;
-    long attackspeed, timestamp;
+    long attackspeed, attackCooldown;
 
 
     public Enemy(GameScreen gs, float boundingRadius, Location<Vector2> target) {
         super(gs, boundingRadius, target);
-        damage = 30;
-        attackspeed = 2000;
-        timestamp = 0;
+        gs.getEnemies().add(this);
+        damage = 2;
+        attackspeed = 50;
+        attackCooldown = 0;
 
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
-        if(attacking && (System.currentTimeMillis() - timestamp) > attackspeed){
+        if(attacking && (System.currentTimeMillis() - attackCooldown) > attackspeed){
             gs.getPlayer().damage(damage);
-            System.out.println("attack");
-            timestamp = System.currentTimeMillis();
+            attackCooldown = System.currentTimeMillis();
         }
 
+    }
+    @Override
+    public void die(){
+        super.die();
+        gs.getEnemies().remove(this);
     }
     public void setAttacking(boolean attacking) {
         this.attacking = attacking;

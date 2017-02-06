@@ -42,6 +42,8 @@ public class GameScreen implements Screen {
     private ArrayList<Entity> entities;
     private ArrayList<Entity> entitiestoDelete;
 
+    private ArrayList<Enemy> enemies;
+
     //Camera and Viewport
     private OrthographicCamera cam;
     //private FitViewport vp;
@@ -85,6 +87,8 @@ public class GameScreen implements Screen {
         interactablestoAdd = new ArrayList<Interactable>();
         paused = false;
         debugged = false;
+
+        enemies = new ArrayList<Enemy>();
 
 
         //Camera and Viewport
@@ -330,14 +334,13 @@ public class GameScreen implements Screen {
         for (Entity e: entitiestoDelete) {
             entities.remove(e);
             interactables.remove(e);
-            e.dispose();
+            e.destroyBody();
         }
         entitiestoDelete.clear();
     }
     private void deleteInteractables(){
         for (Interactable i: interactablestoDelete) {
             interactables.remove(i);
-            i.dispose();
         }
         interactablestoDelete.clear();
 
@@ -347,6 +350,10 @@ public class GameScreen implements Screen {
             interactables.add(i);
         }
         interactablestoAdd.clear();
+    }
+
+    public ArrayList<Enemy> getEnemies() {
+        return enemies;
     }
 
 }

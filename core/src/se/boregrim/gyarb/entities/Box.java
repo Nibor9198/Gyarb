@@ -51,10 +51,6 @@ public class Box implements Entity {
 
     }
 
-    @Override
-    public void dispose() {
-
-    }
 
     @Override
     public boolean isDead() {
@@ -69,7 +65,11 @@ public class Box implements Entity {
 
     @Override
     public void die() {
-        world.destroyBody(body);
         gs.removeEntity(this);
+    }
+
+    @Override
+    public void destroyBody() {
+        world.destroyBody(body);
     }
 }

@@ -63,7 +63,7 @@ public class PathSteering extends Arrive {
     protected SteeringAcceleration calculateRealSteering(SteeringAcceleration steering) {
         //System.out.println(owner.getPosition().dst(target.getPosition()));
             if ((owner.getPosition().dst(target.getPosition()) > 3)) {
-                if (System.currentTimeMillis() - timestamp < 10000) {
+                if (System.currentTimeMillis() - timestamp < 4000) {
 
                     if(outOfBounds){
                         //Vad som händer när en entity är utanför banan

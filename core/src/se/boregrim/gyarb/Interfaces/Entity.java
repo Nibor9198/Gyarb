@@ -7,5 +7,6 @@ import se.boregrim.gyarb.Interfaces.Interactable;
  */
 public interface Entity extends Interactable{
     public void die();
+    public void destroyBody();
 
 }

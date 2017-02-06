@@ -21,6 +21,7 @@ public class GameUiScreen implements Screen {
     private GameScreen gs;
     private Stage stage;
     FitViewport vp;
+
     Game game;
     Label label;
     ProgressBar health;
@@ -33,7 +34,7 @@ public class GameUiScreen implements Screen {
         //vp = gs.getViewport();
         vp = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         stage = new Stage(vp);
-        label = new Label("Tjenare", game.getSkin());
+        label = new Label("0", game.getSkin());
         health = new ProgressBar(0,100,1,false, game.getSkin());
 
         Button b = new Button(game.getSkin());
@@ -63,7 +64,8 @@ public class GameUiScreen implements Screen {
             float x = vp.getScreenX();
             float y = vp.getScreenY();
 
-            label.setText(((GameScreen)game.getScreens().get("game")).getPlayer().getPosition().toString() + gs.getPlayer().getHealth());
+            //label.setText(((GameScreen)game.getScreens().get("game")).getPlayer().getPosition().toString() + gs.getPlayer().getHealth());
+            label.setText(gs.getEnemies().size()+"");
             label.setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f/PPM,50f/PPM);
             health.setBounds(health.getWidth(),health.getHeight(), health.getWidth(),health.getHeight());
             health.setValue(gs.getPlayer().getHealth());
