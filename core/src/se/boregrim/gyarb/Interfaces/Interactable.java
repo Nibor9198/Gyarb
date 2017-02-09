@@ -7,4 +7,5 @@ public interface Interactable {
     public void render(float delta);
     public void update(float delta);
     public void input(boolean paused);
+    public boolean isDead();
 }

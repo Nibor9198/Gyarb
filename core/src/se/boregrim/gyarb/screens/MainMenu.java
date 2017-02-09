@@ -44,7 +44,7 @@ public class MainMenu implements Screen {
         // Initiating ui
 
 
-        bg = (Texture) manager.get("harambe.png");
+        bg = (Texture) manager.get("menuBackground.png");
         title = new Image((Texture)manager.get("title.png"));
         //label = new Label("Epic Title",game.getSkin());
         //label.setAlignment(1);

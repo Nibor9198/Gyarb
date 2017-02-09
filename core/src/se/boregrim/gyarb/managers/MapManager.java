@@ -14,6 +14,7 @@ import se.boregrim.gyarb.pathfinding.GraphImp;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static se.boregrim.gyarb.utils.Constants.*;
 import static se.boregrim.gyarb.utils.Constants.CAT_ENEMY;
@@ -34,6 +35,9 @@ public class MapManager {
     public static int pixelHeight;
     public static GraphImp graph;
 
+    static ArrayList<Vector2> playerSpawn;
+    static ArrayList<Vector2> enemySpawn;
+
     public static ArrayList<Vector2> nonWalkablePos;
 
     public void  loadMap(String mapRef, World world){
@@ -47,9 +51,12 @@ public class MapManager {
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
 
+        playerSpawn = new ArrayList<Vector2>();
+        enemySpawn = new ArrayList<Vector2>();
 
         PolygonShape shape = new PolygonShape();
         //GraphImp graph;
+
 
 
         MapProperties properties = map.getProperties();
@@ -58,7 +65,7 @@ public class MapManager {
 
         // Create box2d objects from the map file (Collision)
 
-        for (MapObject mapObject : map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)){
+        for (MapObject mapObject : map.getLayers().get("Hole").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
             bdef.type = BodyDef.BodyType.StaticBody;
             bdef.position.set((rect.getX()+ rect.getWidth()/ 2) / PPM ,(rect.getY() + rect.getHeight()/ 2) / PPM);
@@ -73,7 +80,7 @@ public class MapManager {
 
             addNonWalkable(rect);
         }
-        for (MapObject mapObject : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
+        for (MapObject mapObject : map.getLayers().get("Wall").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
             bdef.type = BodyDef.BodyType.StaticBody;
             bdef.position.set((rect.getX()+ rect.getWidth()/ 2) / PPM ,(rect.getY() + rect.getHeight()/ 2) / PPM);
@@ -89,7 +96,22 @@ public class MapManager {
             addNonWalkable(rect);
         }
 
+        for (MapObject mapObject : map.getLayers().get("PlayerSpawn").getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
+            Vector2 positon = new Vector2(rect.getX()/PPM, rect.getY()/PPM);
+            playerSpawn.add(positon);
+        }
+        for (MapObject mapObject : map.getLayers().get("EnemySpawn").getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) mapObject).getRectangle();
+            Vector2 positon = new Vector2(rect.getX()/PPM, rect.getY()/PPM);
+            enemySpawn.add(positon);
+        }
+
+
         graph = GraphGenerator.generateGraph(map);
+
+
+
 
     }
 
@@ -138,5 +160,14 @@ public class MapManager {
 
     public void setOtmr(OrthogonalTiledMapRenderer otmr) {
         this.otmr = otmr;
+    }
+
+    public static Vector2 playerSpawn(){
+        Random r = new Random();
+        return playerSpawn.get(r.nextInt(playerSpawn.size()));
+    }
+    public static Vector2 enemySpawn(){
+        Random r = new Random();
+        return enemySpawn.get(r.nextInt(enemySpawn.size()));
     }
 }
