@@ -112,6 +112,8 @@ public class Player extends Actor implements Entity, Location<Vector2> {
     @Override
     public void die() {
         //Loose the game or loose one life
+        dead = true;
+
     }
     @Override
     public void input(boolean paused){

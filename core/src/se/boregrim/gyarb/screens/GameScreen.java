@@ -155,8 +155,8 @@ public class GameScreen implements Screen {
 
         updateInteractables(delta);
             //Avkommentera!
-        //cam.position.set(player.body.getPosition().x,player.body.getPosition().y,0);
-        cam.position.set(player.getX(),player.getY(),0);
+        cam.position.set(player.body.getPosition().x,player.body.getPosition().y,0);
+        //cam.position.set(player.getX(),player.getY(),0);
 
 
         //cam.lookAt(player.body.getPosition().x,player.body.getPosition().y,0);
@@ -183,7 +183,7 @@ public class GameScreen implements Screen {
 
 
         //Render Box2d
-        b2dr.render(world, cam.combined);
+        //b2dr.render(world, cam.combined);
 
         //Interactables
         renderInteractables(delta);
@@ -201,7 +201,8 @@ public class GameScreen implements Screen {
     public void handleInput(float delta){
 
         for (Interactable i :interactables) {
-            i.input(paused);
+            if(!i.isDead())
+                i.input(paused);
         }
 
         if(!paused){

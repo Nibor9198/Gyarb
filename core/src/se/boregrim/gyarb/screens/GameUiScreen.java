@@ -12,6 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import se.boregrim.gyarb.Game;
+
+import java.util.Random;
+
 import static se.boregrim.gyarb.utils.Constants.PPM;
 
 /**
@@ -23,9 +26,12 @@ public class GameUiScreen implements Screen {
     FitViewport vp;
 
     Game game;
-    Label label;
+    Label label, middleLabel;
     ProgressBar health;
 
+    int wavecount;
+    float scaleTemp;
+    long waveStamp;
 
     public GameUiScreen(GameScreen gameScreen){
         gs = gameScreen;
@@ -35,14 +41,19 @@ public class GameUiScreen implements Screen {
         vp = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         stage = new Stage(vp);
         label = new Label("0", game.getSkin());
+        middleLabel = new Label("Wave 0", game.getSkin());
         health = new ProgressBar(0,100,1,false, game.getSkin());
 
         Button b = new Button(game.getSkin());
 
         stage.addActor(label);
+        stage.addActor(middleLabel);
         stage.addActor(health);
 
         //stage.addActor(b);
+        wavecount = 0;
+        scaleTemp = 0.01f;
+        waveStamp = System.currentTimeMillis();
 
     }
     @Override
@@ -55,6 +66,11 @@ public class GameUiScreen implements Screen {
         update(delta);
 
         //stage.getActors().get(1).setBounds(x-2f,y-2f,200,200);
+
+
+
+
+
         stage.act(delta);
         stage.draw();
 
@@ -69,6 +85,16 @@ public class GameUiScreen implements Screen {
             label.setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f/PPM,50f/PPM);
             health.setBounds(health.getWidth(),health.getHeight(), health.getWidth(),health.getHeight());
             health.setValue(gs.getPlayer().getHealth());
+
+            middleLabel.setBounds(vp.getScreenWidth() * 0.5f - 2000/PPM, vp.getScreenHeight() * 0.75f,50/PPM, 200/PPM);
+            if((System.currentTimeMillis()-waveStamp) < 4000)
+                scaleTemp = scaleTemp * (3-(scaleTemp));
+            else if (scaleTemp != 0.01f)
+                scaleTemp = 0.01f;
+
+
+
+            middleLabel.setFontScale(scaleTemp);
     }
 
     @Override
@@ -97,5 +123,11 @@ public class GameUiScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    public void nextWave(int wave){
+        middleLabel. setText("Wave " + wave);
+        wavecount = wave;
+        waveStamp = System.currentTimeMillis();
     }
 }
