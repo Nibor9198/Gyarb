@@ -19,6 +19,7 @@ import se.boregrim.gyarb.Interfaces.Interactable;
 import se.boregrim.gyarb.Listeners.B2dContactListener;
 import se.boregrim.gyarb.entities.*;
 import se.boregrim.gyarb.managers.MapManager;
+import se.boregrim.gyarb.managers.SpawnManager;
 import se.boregrim.gyarb.pathfinding.PathfindDebugrenderer;
 import se.boregrim.gyarb.utils.Constants;
 
@@ -34,6 +35,9 @@ public class GameScreen implements Screen {
     private Game game;
 
     private boolean paused;
+    int waveCount;
+
+    SpawnManager spawner;
 
     private ArrayList<Interactable> interactables;
     private ArrayList<Interactable> interactablestoDelete;
@@ -71,6 +75,7 @@ public class GameScreen implements Screen {
     PathfindDebugrenderer pathfindDebugrenderer;
 
 
+
     //Ui
     GameUiScreen ui;
 
@@ -90,6 +95,9 @@ public class GameScreen implements Screen {
 
         enemies = new ArrayList<Enemy>();
 
+        spawner = new SpawnManager(this);
+        addInteractable(spawner);
+        waveCount = 0;
 
         //Camera and Viewport
         cam = new OrthographicCamera();
@@ -183,7 +191,7 @@ public class GameScreen implements Screen {
 
 
         //Render Box2d
-        //b2dr.render(world, cam.combined);
+        b2dr.render(world, cam.combined);
 
         //Interactables
         renderInteractables(delta);
@@ -201,7 +209,7 @@ public class GameScreen implements Screen {
     public void handleInput(float delta){
 
         for (Interactable i :interactables) {
-            if(!i.isDead())
+            //if(!i.isDead())
                 i.input(paused);
         }
 
@@ -226,9 +234,7 @@ public class GameScreen implements Screen {
             }
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.K)){
-                AiEntity e;
-                Vector2 pos = MapManager.enemySpawn();
-                e = new TestEnemy(this, (int) (pos.x * PPM), (int) (pos.y * PPM), 25, player);
+
             }
         }
 
@@ -275,6 +281,19 @@ public class GameScreen implements Screen {
         entities.add(e);
         addInteractable(e);
     }
+
+    public void nexWave(){
+        waveCount++;
+        ui.nextWave(waveCount);
+    }
+
+
+
+
+
+
+
+
     public void removeEntity(Entity e){
         entitiestoDelete.add(e);
     }
@@ -306,20 +325,7 @@ public class GameScreen implements Screen {
 
     //Getters and Setters
     //public FitViewport getViewport(){return vp;}
-    public ScreenViewport getViewport(){return vp;}
-    public Game getGame() {
-        return game;
-    }
 
-    public World getWorld() {
-        return world;
-    }
-
-    public SpriteBatch getBatch() {
-        return batch;
-    }
-    public Player getPlayer(){return player;}
-    public ArrayList<Interactable> getInteractables(){return interactables;}
 
 
     public void toggleDebugged(){
@@ -353,8 +359,28 @@ public class GameScreen implements Screen {
         interactablestoAdd.clear();
     }
 
+    //Getters and Setters
+    public ScreenViewport getViewport(){return vp;}
+    public Game getGame() {
+        return game;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
+    }
+    public Player getPlayer(){return player;}
+    public ArrayList<Interactable> getInteractables(){return interactables;}
     public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
+
+    public int getWaveCount() {
+        return waveCount;
+    }
+
 
 }

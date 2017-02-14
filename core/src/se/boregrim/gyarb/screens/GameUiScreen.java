@@ -53,7 +53,7 @@ public class GameUiScreen implements Screen {
         //stage.addActor(b);
         wavecount = 0;
         scaleTemp = 0.01f;
-        waveStamp = System.currentTimeMillis();
+        waveStamp = 0;
 
     }
     @Override
