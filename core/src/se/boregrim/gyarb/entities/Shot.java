@@ -50,7 +50,7 @@ public class Shot extends Actor {
             for (Entity e: gs.getEntities()) {
                 if (e instanceof AiEntity) {
                     if (target.equals(((AiEntity) e).getBody().getFixtureList().first())) {
-                        ((AiEntity) e).damage(2.5f * body.getLinearVelocity().len());
+                        ((AiEntity) e).takeDamage(2.5f * body.getLinearVelocity().len());
                          die();
                         break;
                     }

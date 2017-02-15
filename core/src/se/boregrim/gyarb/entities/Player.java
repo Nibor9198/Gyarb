@@ -19,7 +19,7 @@ import static se.boregrim.gyarb.utils.Constants.PPM;
 /**
  * Created by Robin on 2016-11-09.
  */
-public class Player extends Actor implements Entity, Location<Vector2> {
+public class Player extends Actor implements Location<Vector2> {
     public World world;
 
     private GameScreen gs;

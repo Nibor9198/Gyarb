@@ -144,7 +144,7 @@ public class Actor extends Sprite implements Entity {
             health+=(maxHealth-health)* 0.01;
             regenCooldown = 1000;
             regenTimestamp = System.currentTimeMillis();
-            System.out.println("heal: " + (maxHealth-health)* 0.1 );
+            //System.out.println("heal: " + (maxHealth-health)* 0.1 );
         }
     }
 
@@ -174,7 +174,7 @@ public class Actor extends Sprite implements Entity {
     public float getHealth() {
         return health;
     }
-    public void damage(float damage){
+    public void takeDamage(float damage){
         regenTimestamp = System.currentTimeMillis();
         regenCooldown = 3000;
         health = health - damage;

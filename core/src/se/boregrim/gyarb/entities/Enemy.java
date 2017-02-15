@@ -27,7 +27,7 @@ public class Enemy extends AiEntity {
     public void update(float delta) {
         super.update(delta);
         if(attacking && (System.currentTimeMillis() - attackCooldown) > attackspeed){
-            gs.getPlayer().damage(damage);
+            gs.getPlayer().takeDamage(damage);
             attackCooldown = System.currentTimeMillis();
         }
 

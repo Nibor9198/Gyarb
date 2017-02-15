@@ -19,7 +19,6 @@ public class SpawnManager implements Interactable {
     long timestamp;
     boolean started, newWave;
 
-
     long diff;
 
 
