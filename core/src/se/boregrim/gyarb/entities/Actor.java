@@ -62,6 +62,7 @@ public class Actor extends Sprite implements Entity {
         body.setAngularDamping(aDamping);
         hasBody = true;
         body.setUserData(this);
+        
     }
     public void createFixture(CircleShape shape, float radius, float density, int catBits, int maskBits, int groupIndex) {
         //Creating Player fixture
@@ -73,6 +74,8 @@ public class Actor extends Sprite implements Entity {
         fdef.filter.maskBits = (short) maskBits;
         fdef.filter.groupIndex = (short) groupIndex;
         body.createFixture(fdef);
+
+        shape.dispose();
     }
     public void createCollisionSensor(float radius,float angle){
         //Creating Hit Sensor fixture
@@ -97,7 +100,7 @@ public class Actor extends Sprite implements Entity {
 
         body.createFixture(fdef).setUserData("hitSensor");
 
-
+        shape.dispose();
         //Set bounds
 
 
