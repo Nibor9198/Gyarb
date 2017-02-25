@@ -122,7 +122,7 @@ public class GameUiScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 
     public void nextWave(int wave){

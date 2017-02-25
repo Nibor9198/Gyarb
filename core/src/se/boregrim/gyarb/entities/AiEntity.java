@@ -70,8 +70,6 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
 
 
 
-
-
     }
     public void defaultSteering(){
         pathfindInit();

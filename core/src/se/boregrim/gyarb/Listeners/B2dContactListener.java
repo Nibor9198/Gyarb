@@ -69,7 +69,7 @@ public class B2dContactListener implements ContactListener {
     private void damagePlayer(Fixture enemy, boolean attacking){
         //For each Entity
         for (Entity e: gs.getEntities()) {
-                //That is a
+                //That is a Enemy
                 if(e instanceof Enemy) {
                 if(((Enemy) e).getBody().getFixtureList().get(1).equals(enemy)) {
                     //System.out.println("1");

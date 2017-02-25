@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
 
 
     //Map rendering
-
+    private MapManager mapManager;
     private OrthogonalTiledMapRenderer otmr;
 
     //Box2d
@@ -116,7 +116,7 @@ public class GameScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
 
         //Load map
-        MapManager mapManager = new MapManager();
+        mapManager = new MapManager();
         mapManager.loadMap("Maps/TestMap3.tmx", world);
         otmr = mapManager.otmr;
 
@@ -275,7 +275,8 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         rayHandler.dispose();
-        //MapManager.dispose();
+
+        mapManager.dispose();
     }
     public void addEntity(Entity e){
         entities.add(e);
