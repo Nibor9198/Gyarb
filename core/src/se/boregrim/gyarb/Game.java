@@ -62,6 +62,9 @@ public class Game extends com.badlogic.gdx.Game {
 		batch.dispose();
 		assets.dispose();
 	}
+	public void newGame(){
+		screens.put("game", new GameScreen(this));
+	}
 	public FitViewport getViewport(){
 		return this.viewport;
 	}

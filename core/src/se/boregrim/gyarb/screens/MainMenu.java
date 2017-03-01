@@ -52,7 +52,7 @@ public class MainMenu implements Screen {
         options = new TextButton("Options", game.getSkin(), "default");
         exit = new TextButton("Exit game", game.getSkin(), "default");
         start.setTouchable(Touchable.enabled);
-        //exit.setTouchable(Touchable.enabled);
+        exit.setTouchable(Touchable.enabled);
 
 
 
@@ -152,6 +152,6 @@ public class MainMenu implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-
+        //batch.dispose();
     }
 }
