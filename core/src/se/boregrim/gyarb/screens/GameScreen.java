@@ -36,6 +36,7 @@ public class GameScreen implements Screen {
 
     private boolean paused;
     int waveCount;
+    int score;
 
     SpawnManager spawner;
 
@@ -98,6 +99,7 @@ public class GameScreen implements Screen {
         spawner = new SpawnManager(this);
         addInteractable(spawner);
         waveCount = 0;
+        score = 0;
 
         //Camera and Viewport
         cam = new OrthographicCamera();
@@ -287,7 +289,11 @@ public class GameScreen implements Screen {
         ui.nextWave(waveCount);
     }
 
+    public void gameOver(){
+        pause();
+        game.setScreen(new GameOverScreen(this));
 
+    }
 
 
 
@@ -358,6 +364,9 @@ public class GameScreen implements Screen {
         }
         interactablestoAdd.clear();
     }
+    public void addScore(int score){
+        this.score += score;
+    }
 
     //Getters and Setters
     public ScreenViewport getViewport(){return vp;}
@@ -382,5 +391,7 @@ public class GameScreen implements Screen {
         return waveCount;
     }
 
-
+    public int getScore() {
+        return score;
+    }
 }
