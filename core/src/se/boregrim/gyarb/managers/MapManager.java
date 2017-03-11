@@ -40,7 +40,7 @@ public class MapManager {
 
     public static ArrayList<Vector2> nonWalkablePos;
 
-    public  void loadMap(String mapRef, World world){
+    public void loadMap(String mapRef, World world){
         this.mapRef = mapRef;
         maploader = new TmxMapLoader();
         map = maploader.load(mapRef);
@@ -107,8 +107,6 @@ public class MapManager {
             Vector2 positon = new Vector2(rect.getX()/PPM, rect.getY()/PPM);
             enemySpawn.add(positon);
         }
-
-
         graph = GraphGenerator.generateGraph(map);
 
 

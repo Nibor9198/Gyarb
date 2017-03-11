@@ -5,9 +5,6 @@ package se.boregrim.gyarb.utils;
  */
 public final class Constants {
     public static final float PPM = 32;
-
-
-
 //Collision Categorys
     public static final short CAT_WALL = 1;
     public static final short CAT_EDGE = 2;
