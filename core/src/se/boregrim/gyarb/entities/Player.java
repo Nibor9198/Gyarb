@@ -113,6 +113,7 @@ public class Player extends Actor implements Location<Vector2> {
     public void die() {
         //Loose the game or loose one life
         dead = true;
+        gs.gameOver();
 
     }
     @Override

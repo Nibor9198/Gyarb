@@ -81,7 +81,8 @@ public class GameUiScreen implements Screen {
             float y = vp.getScreenY();
 
             //label.setText(((GameScreen)game.getScreens().get("game")).getPlayer().getPosition().toString() + gs.getPlayer().getHealth());
-            label.setText(gs.getEnemies().size()+"");
+            //label.setText(gs.getEnemies().size()+"");
+            label.setText(gs.getScore()+"");
             label.setBounds(vp.getScreenWidth()*0.5f - 200, vp.getScreenHeight()*0.5f,200f/PPM,50f/PPM);
             health.setBounds(health.getWidth(),health.getHeight(), health.getWidth(),health.getHeight());
             health.setValue(gs.getPlayer().getHealth());

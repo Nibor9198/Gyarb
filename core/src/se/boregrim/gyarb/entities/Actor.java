@@ -62,6 +62,7 @@ public class Actor extends Sprite implements Entity {
         body.setAngularDamping(aDamping);
         hasBody = true;
         body.setUserData(this);
+        
     }
     public void createFixture(CircleShape shape, float radius, float density, int catBits, int maskBits, int groupIndex) {
         //Creating Player fixture
@@ -73,6 +74,8 @@ public class Actor extends Sprite implements Entity {
         fdef.filter.maskBits = (short) maskBits;
         fdef.filter.groupIndex = (short) groupIndex;
         body.createFixture(fdef);
+
+        shape.dispose();
     }
     public void createCollisionSensor(float radius,float angle){
         //Creating Hit Sensor fixture
@@ -97,7 +100,7 @@ public class Actor extends Sprite implements Entity {
 
         body.createFixture(fdef).setUserData("hitSensor");
 
-
+        shape.dispose();
         //Set bounds
 
 
@@ -155,17 +158,16 @@ public class Actor extends Sprite implements Entity {
 
     @Override
     public void render(float delta) {
+        //If this sprite has a texture
         if(getTexture() != null) {
-            //Gdx.gl.glActiveTexture(Gdx.gl20.GL_TEXTURE0);
+
             batch.begin();
+            //Give the batch information about the current viewport
             batch.setProjectionMatrix(gs.getViewport().getCamera().combined);
+            //Draw the Texture to the screen using the already set coord and width
             batch.draw(getTexture(), getX(),getY(), getWidth(),getHeight());
 
             batch.end();
-
-            //batch.draw(getTexture(), body.getPosition().x - getWidth(), body.getPosition().y - getHeight(), getWidth(), getHeight());
-
-
         }
     }
 

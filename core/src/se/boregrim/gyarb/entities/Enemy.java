@@ -12,6 +12,7 @@ public class Enemy extends AiEntity {
     float damage;
     boolean attacking;
     long attackspeed, attackCooldown;
+    int worth;
 
 
     public Enemy(GameScreen gs, float boundingRadius, Location<Vector2> target) {
@@ -20,6 +21,7 @@ public class Enemy extends AiEntity {
         damage = 2;
         attackspeed = 50;
         attackCooldown = 0;
+        worth = 10;
 
     }
 
@@ -35,6 +37,7 @@ public class Enemy extends AiEntity {
     @Override
     public void die(){
         super.die();
+        gs.addScore(worth);
         gs.getEnemies().remove(this);
     }
     public void setAttacking(boolean attacking) {

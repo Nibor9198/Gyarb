@@ -22,6 +22,7 @@ public class Assets {
         manager.load("Enemy.png", Texture.class);
         //manager.load("PlayerSprite.png", Texture.class);
         manager.load("title.png" ,Texture.class);
+        manager.load("Gameover.png", Texture.class);
         //manager.load("harambe2.png", Texture.class);
         //manager.load("harambe3.png", Texture.class);
         //manager.load("harambe4.png", Texture.class);
