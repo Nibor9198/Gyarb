@@ -126,7 +126,7 @@ public class MapManager {
     }
     public void dispose(){
         map.dispose();
-        otmr.dispose();
+        //otmr.dispose();
     }
 
     public String getMapRef() {

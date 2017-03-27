@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import se.boregrim.gyarb.Interfaces.Entity;
+import se.boregrim.gyarb.managers.SpawnManager;
 import se.boregrim.gyarb.screens.GameScreen;
 import se.boregrim.gyarb.utils.Constants;
 import se.boregrim.gyarb.utils.SteeringUtils;
@@ -26,7 +27,7 @@ public class Player extends Actor implements Location<Vector2> {
 
     private float angle;
 
-    public Player(GameScreen gs, int x, int y){
+    public Player(GameScreen gs, float x, float y){
 
         super(gs);
         this.gs = gs;
@@ -43,7 +44,7 @@ public class Player extends Actor implements Location<Vector2> {
         //setSprite("PlayerSprite.png",32,32);
 
         //basic(gs,x,y);
-        body = super.body;
+        //body = super.body;
 
         setSprite("Player.png",32,32);
         //define(x,y);

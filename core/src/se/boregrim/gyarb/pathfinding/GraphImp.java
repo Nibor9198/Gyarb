@@ -5,6 +5,8 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.utils.Array;
 import se.boregrim.gyarb.managers.MapManager;
 
+import java.util.ArrayList;
+
 /**
  * Created by Robin on 2016-12-08.
  */

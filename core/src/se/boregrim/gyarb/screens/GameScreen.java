@@ -5,6 +5,7 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.graphics.*;
 
 import com.badlogic.gdx.graphics.Color;
@@ -20,6 +21,7 @@ import se.boregrim.gyarb.Listeners.B2dContactListener;
 import se.boregrim.gyarb.entities.*;
 import se.boregrim.gyarb.managers.MapManager;
 import se.boregrim.gyarb.managers.SpawnManager;
+import se.boregrim.gyarb.pathfinding.HeuristicImp;
 import se.boregrim.gyarb.pathfinding.PathfindDebugrenderer;
 import se.boregrim.gyarb.utils.Constants;
 
@@ -73,7 +75,9 @@ public class GameScreen implements Screen {
     private RayHandler rayHandler;
     public boolean debugged;
 
-    //Debug
+    //Pathfind
+    HeuristicImp heuristic;
+    IndexedAStarPathFinder pathFinder;
     PathfindDebugrenderer pathfindDebugrenderer;
 
 
@@ -125,10 +129,13 @@ public class GameScreen implements Screen {
 
 
         //Add Player
-        player = new Player(this, (int)vp.getWorldWidth()/2,(int)vp.getWorldHeight()/2);
+        player = spawner.spawnPlayer();
 
 
-        //Pathfinddebugger
+
+        //Pathfinding
+        pathFinder = new IndexedAStarPathFinder(MapManager.graph,false);
+        heuristic = new HeuristicImp();
         pathfindDebugrenderer = new PathfindDebugrenderer(this);
 
         //Lighting
@@ -300,12 +307,6 @@ public class GameScreen implements Screen {
         game.setScreen(new GameOverScreen(this));
 
     }
-
-
-
-
-
-
     public void removeEntity(Entity e){
         entitiestoDelete.add(e);
     }
@@ -341,7 +342,6 @@ public class GameScreen implements Screen {
                 ) {
             e.destroyBody();
         }
-
         show();
     }
 
@@ -409,5 +409,12 @@ public class GameScreen implements Screen {
 
     public int getScore() {
         return score;
+    }
+    public HeuristicImp getHeuristic(){
+        return heuristic;
+    }
+
+    public IndexedAStarPathFinder getPathFinder() {
+        return pathFinder;
     }
 }

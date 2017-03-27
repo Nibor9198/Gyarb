@@ -3,6 +3,7 @@ package se.boregrim.gyarb.managers;
 import com.badlogic.gdx.math.Vector2;
 import se.boregrim.gyarb.Interfaces.Interactable;
 import se.boregrim.gyarb.entities.AiEntity;
+import se.boregrim.gyarb.entities.Player;
 import se.boregrim.gyarb.entities.TestEnemy;
 import se.boregrim.gyarb.screens.GameScreen;
 
@@ -75,8 +76,12 @@ public class SpawnManager implements Interactable {
         return false;
     }
 
-    public void spawnEnemy(){
+    public TestEnemy spawnEnemy(){
         Vector2 pos = MapManager.enemySpawn();
-        new TestEnemy(gs, (int) (pos.x * PPM), (int) (pos.y * PPM), 25, gs.getPlayer());
+        return new TestEnemy(gs, (int) (pos.x * PPM), (int) (pos.y * PPM), 25, gs.getPlayer());
+    }
+    public Player spawnPlayer(){
+        Vector2 pos = MapManager.playerSpawn();
+        return new Player(gs,/* (int)gs.getViewport().getWorldWidth()/2,(int)gs.getViewport().getWorldHeight()/2,*/pos.x,pos.y);
     }
 }

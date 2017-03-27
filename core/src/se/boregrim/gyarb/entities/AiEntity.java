@@ -31,7 +31,7 @@ import se.boregrim.gyarb.utils.SteeringUtils;
 /**
  * Created by robin.boregrim on 2016-12-01.
  */
-public class AiEntity extends Actor  implements Steerable<Vector2>{
+public class AiEntity extends Actor implements Steerable<Vector2>{
     boolean tagged;
     Location<Vector2> target;
     float boundingRadius;
@@ -49,6 +49,11 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
     IndexedAStarPathFinder pathFinder;
     Path outpath;
 
+    @Override
+    public void die() {
+        super.die();
+        outpath.clear();
+    }
 
     public AiEntity(GameScreen gs, float boundingRadius, Location<Vector2> target) {
         super(gs);
@@ -74,10 +79,10 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
     public void defaultSteering(){
         pathfindInit();
 
-        Arrive<Vector2> arrive = new Arrive<Vector2>(this, target)
-                .setTimeToTarget(0.1f)
-                .setArrivalTolerance(2f)
-                .setDecelerationRadius(15);
+        //Arrive<Vector2> arrive = new Arrive<Vector2>(this, target)
+        //        .setTimeToTarget(0.1f)
+        //        .setArrivalTolerance(2f)
+        //        .setDecelerationRadius(15);
 
 
         PathSteering pathArrive = new PathSteering(this, target);
@@ -96,10 +101,14 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
     private void pathfindInit(){
 
         //stateMachine = new DefaultStateMachine();
-        pathFinder = new IndexedAStarPathFinder(MapManager.graph,false);
+        pathFinder = gs.getPathFinder();
 
         pathfind();
 
+    }
+
+    public Path getOutpath() {
+        return  pathfind();
     }
 
     private Path pathfind(){
@@ -114,7 +123,7 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
             Node startNode = MapManager.graph.getNodeByPos(startX, startY);
             Node endNode = MapManager.graph.getNodeByPos(endX, endY);
             outpath = new Path();
-            pathFinder.searchNodePath(startNode, endNode, new HeuristicImp(), outpath);
+            pathFinder.searchNodePath(startNode, endNode, gs.getHeuristic() , outpath);
             //System.out.println(outpath.getCount());
             return outpath;
         }else{
@@ -130,9 +139,9 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
             behavior.calculateSteering(steeringOutput);
             applySteering(delta);
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.L)){
-            pathfind();
-        }
+        //if(Gdx.input.isKeyJustPressed(Input.Keys.L)){
+        //    pathfind();
+        //}
 
     }
 
@@ -154,7 +163,6 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
             if(!linearVelocity.isZero()){
                 float newOrientation = vectorToAngle(linearVelocity);
                 body.setAngularVelocity((newOrientation - getAngularVelocity()) * delta);
-                //body.applyTorque();
                 body.setTransform(body.getPosition(), (float) (newOrientation+Math.PI/2));
             }
         }
@@ -166,11 +174,6 @@ public class AiEntity extends Actor  implements Steerable<Vector2>{
                 body.setLinearVelocity(velocity.scl(maxLinearSpeed/(float) (Math.sqrt(currentSpeedSquare))));
             }
         }
-    }
-
-    public Path getOutpath() {
-        pathfind();
-        return outpath;
     }
 
     @Override

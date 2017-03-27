@@ -9,7 +9,7 @@ import se.boregrim.gyarb.managers.MapManager;
 /**
  * Created by Robin on 2016-12-08.
  */
-public class    GraphGenerator {
+public class  GraphGenerator {
     public static GraphImp generateGraph(TiledMap map){
         Array<Node> nodes = new Array<Node>();
 
@@ -29,7 +29,6 @@ public class    GraphGenerator {
 
 
         for (int y = 0; y < mapHeight; y++) {
-
             for (int x = 0; x < mapWidth; x++) {
                 TiledMapTileLayer.Cell target = tiles.getCell(x, y);
                 TiledMapTileLayer.Cell up = tiles.getCell(x, y+1);
@@ -43,7 +42,7 @@ public class    GraphGenerator {
                 TiledMapTileLayer.Cell downLeft = tiles.getCell(x-1, y-1);
                 boolean walkable = true;
 
-                for (Vector2 pos:MapManager.nonWalkablePos) {
+                for (Vector2 pos : MapManager.nonWalkablePos) {
                     if(x == pos.x && y == pos.y) {
                         walkable = false;
                         break;

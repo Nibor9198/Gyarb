@@ -24,7 +24,7 @@ public class PathSteering extends Arrive {
     Location target, current;
     boolean outOfBounds;
 
-
+//Vad händer om en ai inte kan hitta en väg?
 
     public PathSteering(Steerable owner, Location target) {
         super(owner);
@@ -75,6 +75,7 @@ public class PathSteering extends Arrive {
                     } else {
                         if (!nextLocation()) {
                             nextPath();
+                            timestamp = System.currentTimeMillis();
                         }
                     }
 
