@@ -91,7 +91,7 @@ public class Actor extends Sprite implements Entity {
             verticles[i+1] = new Vector2((float) Math.cos(angle - part * i) * radius ,(float) Math.sin(angle - part * i) * radius);
         }
 
-        shape.setRadius(radius);
+        //shape.setRadius(radius);
         shape.set(verticles);
         fdef.shape = shape;
         fdef.density = 0;

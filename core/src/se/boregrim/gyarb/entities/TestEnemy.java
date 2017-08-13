@@ -13,7 +13,7 @@ public class TestEnemy extends Enemy{
 
     public TestEnemy(GameScreen gs, int x, int y, float boundingRadius, Player player) {
         super(gs, boundingRadius, player);
-        radius = 16;
+        radius = 14;
 
         createBody(x,y,3,3);
         createFixture(new CircleShape(),radius,10, Constants.CAT_ENEMY | Constants.CAT_ENTITY ,Constants.CAT_EDGE| Constants.CAT_LIGHT | Constants.CAT_SHOT,1);

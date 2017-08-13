@@ -41,7 +41,7 @@ public class Player extends Actor implements Location<Vector2> {
         angle = 0;
         setHealth(200);
 
-        radius = 16;
+        radius = 14;
 
         attackSpeed = 200;
         attackTimer = 0;
