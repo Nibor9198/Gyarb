@@ -15,6 +15,8 @@ import static se.boregrim.gyarb.utils.Constants.PPM;
 public class Shot extends Actor {
     private long timestamp;
 
+    private int radius;
+
     public Shot (GameScreen gs, Vector2 pos, Vector2 velocity, boolean needPPM){
         this(gs,pos.x, pos.y,velocity, needPPM);
 
@@ -22,19 +24,26 @@ public class Shot extends Actor {
 
     public Shot(GameScreen gs, float x, float y, Vector2 velocity, boolean needPPM) {
         super(gs);
+
         timestamp = System.currentTimeMillis();
+        radius = 3;
+
         if(needPPM){
             x = (int) (x*PPM);
             y = (int) (y*PPM);
 
         }
+
         createBody(x, y, 0, 0);
-        createFixture(new CircleShape(), 3, 100, Constants.CAT_SHOT | Constants.CAT_ENTITY ,Constants.CAT_WALL | Constants.CAT_ENTITY
+        createFixture(new CircleShape(), radius, 100, Constants.CAT_SHOT | Constants.CAT_ENTITY ,Constants.CAT_WALL | Constants.CAT_ENTITY
         , 0);
         body.getFixtureList().get(0).setRestitution(0.2f);
 
+
+
         body.applyForceToCenter(velocity, true);
 
+        setSprite("Bullet.png",radius * 2 ,radius * 2);
     }
 
     @Override

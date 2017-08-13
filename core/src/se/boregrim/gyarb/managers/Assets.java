@@ -20,6 +20,7 @@ public class Assets {
         manager.load("menuBackground.png", Texture.class);
         manager.load("Player.png", Texture.class);
         manager.load("Enemy.png", Texture.class);
+        manager.load("Bullet.png", Texture.class);
         //manager.load("PlayerSprite.png", Texture.class);
         manager.load("title.png" ,Texture.class);
         manager.load("Gameover.png", Texture.class);

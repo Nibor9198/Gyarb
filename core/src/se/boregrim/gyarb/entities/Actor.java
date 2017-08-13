@@ -123,7 +123,8 @@ public class Actor extends Sprite implements Entity {
     //Set Sprite texture and size
     public void setSprite(String name, int  height, int  width){
         setTexture(manager.get(name, Texture.class));
-        setBounds(body.getPosition().x, body.getPosition().y,height/PPM,width/PPM);
+        setBounds(body.getPosition().x, body.getPosition().y, height/PPM, width/PPM);
+        setBounds(body.getPosition().x, body.getPosition().y, height/PPM, width/PPM);
 
         //System.out.println(getVertices());
 

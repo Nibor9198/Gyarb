@@ -27,6 +27,11 @@ public class Player extends Actor implements Location<Vector2> {
 
     private float angle;
 
+    private int radius;
+
+    private long attackSpeed;
+    private long attackTimer;
+
     public Player(GameScreen gs, float x, float y){
 
         super(gs);
@@ -36,9 +41,13 @@ public class Player extends Actor implements Location<Vector2> {
         angle = 0;
         setHealth(200);
 
+        radius = 16;
+
+        attackSpeed = 200;
+        attackTimer = 0;
 
         createBody(x,y,3,0);
-        createFixture(new CircleShape(),12,20,Constants.CAT_ENEMY ,Constants.CAT_WALL | Constants.CAT_EDGE, 1);
+        createFixture(new CircleShape(),radius,20,Constants.CAT_ENEMY ,Constants.CAT_WALL | Constants.CAT_EDGE, 1);
         createCollisionSensor(20,(float) (Math.PI /2));
 
         //setSprite("PlayerSprite.png",32,32);
@@ -46,7 +55,7 @@ public class Player extends Actor implements Location<Vector2> {
         //basic(gs,x,y);
         //body = super.body;
 
-        setSprite("Player.png",32,32);
+        setSprite("Player.png",radius * 2,radius * 2);
         //define(x,y);
     }
 
@@ -161,8 +170,11 @@ public class Player extends Actor implements Location<Vector2> {
             body.applyForceToCenter( v.x >=0 ? (v.x < maxVel ? vX : 0) : (v.x > -maxVel ? vX : 0) , v.y >=0 ? (v.y < maxVel ? vY : 0) : (v.y > -maxVel? vY : 0),true);
 
         //Others
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-                shoot();
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isButtonPressed(0)){
+                if(System.currentTimeMillis() - attackTimer > attackSpeed) {
+                    shoot();
+                    attackTimer = System.currentTimeMillis();
+                }
             }
 
 
